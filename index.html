@@ -1,11 +1,778 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#142d29"><title>SINGLETRACK — Endless descent</title><link rel="stylesheet" href="style.css"></head>
-<body><canvas id="world" aria-label="First person mountain biking trail"></canvas><div class="grain"></div>
-<header><a class="brand" href="#">↟ SINGLETRACK<span>ENDLESS DESCENT</span></a><div class="topright"><span class="tag">PRE-ALPHA / 01</span><button id="sound" aria-label="Toggle sound">SOUND OFF</button><button id="pause">Ⅱ</button></div></header>
-<div class="hud"><div><span class="eyebrow">GROUND SPEED</span><strong id="speed">0<span> KM/H</span></strong></div><div class="hudright"><span class="eyebrow" id="biome">01 / REDWOOD FOREST</span><strong id="distance">0<span> M</span></strong><small id="best">BEST 0 M</small></div></div>
-<main id="intro" class="panel"><div class="edition">↓ &nbsp; THE MOUNTAIN NEVER ENDS</div><h1>Find your<br><em>flow.</em></h1><p>An endless trail. Two buttons. Everything else is in your hands.</p><button class="primary" id="ride">DROP IN <span>↗</span></button><div class="introfoot"><span>POLYGONAL WORLD. REAL MOMENTUM.</span><button id="guide">HOW TO RIDE ↗</button></div></main>
-<div id="message" role="status"></div><div id="trailinfo"><span class="green">●</span> REDWOOD FOREST <span> / </span> FLOW TRAIL <small>FOLLOW THE DIRT. TRUST THE LEAN.</small></div>
-<div id="controls"><button id="brake" class="ridebutton"><span>↓</span>BRAKE<small>S / HOLD</small></button><div class="controlcenter"><span id="inputmode">← A / D → STEER</span><small>↑ LIFT · SPACE HOP · Q / E WHIP</small><button id="motion">ENABLE TILT ↗</button></div><button id="pedal" class="ridebutton pedal"><span>↑</span>PEDAL<small>W / HOLD</small></button></div>
-<dialog id="help"><button class="close" id="closehelp">×</button><span class="eyebrow">RIDER'S FIELD GUIDE</span><h2>Ride with the trail.</h2><p>Hold pedal to gain speed, brake before corners, and lean into the bend. Leaving the dirt at speed ends your run.</p><dl><dt>Tilt left / right</dt><dd>Steer and lean into berms.</dd><dt>Tilt toward yourself</dt><dd>Lift the front wheel and hold a manual.</dd><dt>Lift, then push forward</dt><dd>Bunny hop. Clear roots and rocks.</dd><dt>Lean in the air</dt><dd>Whip the bike. Center it before landing.</dd></dl><p class="muted">Desktop: A/D or arrows steer · W pedal · S brake · ↑ manual · Space hop · Q/E whip · P pause. On touch without sensors, drag the scenery to steer and swipe up to hop. Enable tilt in Safari, hold your device comfortably, then calibrate.</p><button class="primary" id="calibrate">CALIBRATE TILT ↗</button></dialog>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#142d29"><meta name="description" content="SINGLETRACK: a first-person polygonal mountain biking playtest. Lean into berms, manual roots and pump the trail."><title>SINGLETRACK — Earn the turn</title><style>/* Deliberately no external assets: the phone-uploadable build is self-contained. */
+:root{color-scheme:dark;--cream:#f3f0db;--lime:#d9ee87}*{box-sizing:border-box}body{margin:0;overflow:hidden;background:#a6c0b6;color:var(--cream);font-family:'DM Sans',sans-serif;touch-action:none}canvas{position:fixed;width:100%;height:100%;inset:0}.grain{pointer-events:none;position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,#00000008 4px);opacity:.6}header{position:fixed;top:0;left:0;right:0;padding:28px 36px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff25;background:linear-gradient(#102b2960,transparent)}button,a{color:inherit}button{cursor:pointer;font:600 11px 'DM Sans',sans-serif;letter-spacing:1.5px;border:1px solid #ffffff45;background:#122c2940;padding:12px 17px;border-radius:3px}button:hover{background:#ffffff20}button:focus-visible{outline:3px solid var(--lime)}.brand{font-size:22px;font-weight:800;letter-spacing:3px;text-decoration:none}.brand span{display:block;font-size:9px;letter-spacing:4px;margin:5px 0 0 29px;font-weight:500}.topright{display:flex;gap:14px;align-items:center}.tag,.eyebrow{font-size:10px;letter-spacing:2px}.tag{opacity:.6;margin-right:14px}.hud{position:fixed;top:116px;left:36px;right:36px;display:flex;justify-content:space-between;pointer-events:none}.hud strong{font:600 49px 'Barlow Condensed',sans-serif;display:block;line-height:1.1}.hud strong span{font:500 10px 'DM Sans',sans-serif;letter-spacing:2px}.hudright{text-align:right}.hud small{font-size:9px;letter-spacing:2px;opacity:.65}.panel{position:fixed;left:9%;top:27%;width:390px}.edition{font-size:10px;letter-spacing:2.4px;color:var(--lime)}h1{font:800 clamp(76px,8vw,122px)/.86 'Barlow Condensed',Impact,sans-serif;letter-spacing:-2px;margin:25px 0}h1 em{color:var(--lime);font-style:italic}p{font-size:14px;line-height:1.8;max-width:310px;opacity:.8}.primary{background:var(--lime);border:0;color:#19352d;display:flex;justify-content:space-between;align-items:center;width:255px;margin-top:27px;padding:19px 22px;font-size:12px}.primary:hover{background:#edffad}.primary span{font-size:22px}.introfoot{margin-top:35px;display:flex;flex-direction:column;gap:14px;font-size:8px;letter-spacing:1.7px;opacity:.8}.introfoot button{padding:0;border:0;background:none;text-align:left;font-size:9px}#trailinfo{position:fixed;bottom:38px;left:36px;font-size:10px;letter-spacing:1.8px}#trailinfo span{opacity:.6;margin:0 10px}#trailinfo .green{margin-left:0;color:var(--lime);opacity:1}#trailinfo small{display:block;margin:10px 0 0 21px;font-size:8px;opacity:.55}#controls{position:fixed;bottom:28px;left:36px;right:36px;display:none;justify-content:space-between;align-items:end}.ridebutton{width:110px;height:103px;display:flex;flex-direction:column;align-items:center;gap:5px;background:#172e2bcc;backdrop-filter:blur(8px);user-select:none}.ridebutton span{font-size:27px}.ridebutton small{font-size:8px;opacity:.5}.pedal{color:var(--lime);border-color:#d9ee8780}.ridebutton.held{background:var(--lime);color:#19352d}.controlcenter{text-align:center;font-size:9px;letter-spacing:2px}.controlcenter small{display:block;font-size:8px;margin:10px 0;opacity:.7}.controlcenter button{font-size:8px;padding:8px}#message{position:fixed;top:25%;width:100%;text-align:center;color:var(--lime);font:700 35px 'Barlow Condensed';letter-spacing:2px;pointer-events:none}.hidden{display:none!important}dialog{background:#17382f;color:var(--cream);border:1px solid #d9ee8750;border-radius:6px;padding:35px;width:min(520px,90vw);max-height:85vh;overflow:auto;touch-action:pan-y}dialog::backdrop{background:#081c19a8;backdrop-filter:blur(8px)}dialog h2{font:700 38px 'Barlow Condensed';margin-bottom:10px}dialog p{max-width:none;font-size:12px}dt{font-size:12px;color:var(--lime);margin-top:15px}dd{font-size:11px;margin:6px 0;opacity:.75}.close{position:absolute;right:15px;top:15px;border:0;font-size:22px}#results h2{font:600 32px 'Barlow Condensed'}@media(max-width:650px){header{padding:20px}.brand{font-size:16px}.brand span{font-size:7px}.tag{display:none}.topright{gap:6px}.topright button{padding:10px;font-size:8px}.hud{top:98px;left:20px;right:20px}.hud strong{font-size:37px}.panel{left:8%;top:28%;width:84%}.panel h1{font-size:85px}.panel p{max-width:255px;font-size:13px}.introfoot{margin-top:23px}#trailinfo{left:20px;bottom:25px}#controls{left:15px;right:15px;bottom:20px}.ridebutton{width:80px;height:90px}.controlcenter{font-size:7px;letter-spacing:1px}.controlcenter small{font-size:6px}#message{top:24%;font-size:27px}}@media(max-height:580px){.panel{top:23%}.panel h1{font-size:75px;margin:12px 0}.introfoot{margin-top:12px}.hud{top:92px}.panel p{margin:8px 0}.primary{margin-top:13px}.panel .edition{font-size:8px}}
+#cockpit{pointer-events:none}.hud small{display:block;font-size:9px;letter-spacing:1.4px;margin-top:7px;color:var(--lime)}#sectionhud{position:fixed;top:122px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:2px;text-align:center;opacity:.8}#sectionhud small{display:block;margin-top:9px;font-size:8px;opacity:.65}.textbutton{background:none;border:0;padding:15px 0 0;font-size:9px;color:var(--lime)}.buildstamp{font-size:7px!important;opacity:.45;margin-top:5px!important}.settings{display:grid;gap:13px;margin-top:22px;border-top:1px solid #ffffff25;padding-top:20px}.settings label{display:flex;align-items:center;justify-content:space-between;gap:15px;font-size:11px}.settings select{background:#24483d;border:1px solid #b5c88766;color:var(--cream);font:11px 'DM Sans',sans-serif;padding:9px;border-radius:3px;max-width:210px}.checklabel{justify-content:start!important}.checklabel input{accent-color:var(--lime)}#permissionstatus{display:block;font-size:10px;line-height:1.5;opacity:.7;margin-top:13px}#diagnostics{position:fixed;left:50%;transform:translateX(-50%);bottom:168px;padding:10px 14px;background:#0a211ccc;border:1px solid #d9ee8740;max-width:95vw;text-align:center;font:9px/1.8 monospace;color:var(--lime);pointer-events:none;white-space:nowrap}#diagnostics span{display:block}#fatal{position:fixed;inset:20%;padding:28px;background:#17382f;z-index:20}#fatal h2{font-size:25px}.hud strong{font-family:'Arial Narrow',Impact,sans-serif;font-weight:500}h1,dialog h2,#results h2,#message{font-family:'Arial Narrow',Impact,sans-serif}#message{font-size:26px;top:25%}.panel{top:29%}.panel h1{font-size:clamp(75px,8vw,116px)}.introfoot{margin-top:26px}#results h1{font-size:90px}button{min-height:32px}#sectionhud:not(.riding){opacity:.5}@media(max-width:650px){#sectionhud{top:172px;left:20px;transform:none;text-align:left}.panel{top:30%}.panel h1{font-size:83px}#diagnostics{bottom:160px;font-size:7px}.settings select{max-width:185px}.topright button{min-width:34px}}@media(orientation:landscape) and (max-height:550px){header{padding:12px 20px}.brand{font-size:17px}.brand span{font-size:7px}.hud{top:81px;left:20px;right:20px}.hud strong{font-size:35px}.hud .eyebrow{font-size:8px}.hud small{font-size:7px}.panel{left:8%;top:30%;width:330px}.panel h1{font-size:65px;margin:15px 0}.panel p{font-size:11px;max-width:265px;margin:7px 0}.primary{padding:12px 18px;margin-top:13px;width:220px}.introfoot{display:none}.textbutton{padding-top:10px;font-size:8px}#controls{bottom:15px;left:20px;right:20px}.ridebutton{height:81px;width:99px}.ridebutton span{font-size:24px}#sectionhud{top:84px;left:50%;transform:translateX(-50%);font-size:8px;text-align:center}#message{top:24%;font-size:23px}#trailinfo{bottom:20px;left:20px}#diagnostics{bottom:130px;font-size:8px;padding:5px 10px}.controlcenter small{font-size:7px}.controlcenter button{padding:7px 10px;font-size:8px}#results h1{font-size:72px;margin:12px 0}#results h2{font-size:24px;margin:12px 0}.buildstamp{margin-top:2px!important}}
+@media(orientation:landscape) and (max-height:550px){#intro{top:28%;max-height:70vh;overflow:auto}#intro h1{font-size:52px;margin:10px 0}#intro .primary{margin-top:8px;padding:8px 15px}#intro .textbutton{padding-top:8px}#trailinfo{display:none}}
+@media(orientation:landscape) and (max-height:340px){#intro h1{font-size:38px}#intro p{display:none}}
+</style></head>
+<body><canvas id="world" aria-label="First-person mountain biking trail"></canvas><canvas id="cockpit" aria-hidden="true"></canvas><div class="grain"></div>
+<header><a class="brand" href="#" aria-label="Singletrack">↟ SINGLETRACK<span>ENDLESS DESCENT</span></a><div class="topright"><span class="tag">PLAYTEST / 0.2.0</span><button id="sound" aria-label="Toggle sound">SOUND OFF</button><button id="guide" aria-label="Controls and playtest settings">?</button><button id="pause" aria-label="Pause or resume">Ⅱ</button></div></header>
+<div class="hud"><div><span class="eyebrow">GROUND SPEED</span><strong id="speed">0<span> KM/H</span></strong><small id="riderstate">READY TO RIDE</small></div><div class="hudright"><span class="eyebrow" id="biome">01 / REDWOOD FOREST</span><strong id="distance">0<span> M</span></strong><small id="best">BEST 0 M</small></div></div>
+<div id="sectionhud"><span id="sectionname">WARM-UP</span><small id="grade">5% DESCENT</small></div>
+<main id="intro" class="panel"><div class="edition">↓ &nbsp; EARN THE TURN / BUILD 0.2.0</div><h1>Find your<br><em>flow.</em></h1><p>Your line. Your momentum. A mountain that never ends.</p><button class="primary" id="ride">DROP IN <span>↗</span></button><button id="enableintro" class="textbutton">ENABLE MOTION CONTROLS ↗</button><div class="introfoot"><span>POLYGONAL WORLD. REAL MOMENTUM.</span><span>CONTROLS & PRACTICE SECTIONS: TAP ?</span></div></main>
+<div id="message" role="status"></div><div id="trailinfo"><span class="green">●</span> REDWOOD FOREST <span> / </span> FLOW TRAIL <small>BUILD 0.2.0 · BRAKE BEFORE THE BERM.</small></div>
+<div id="controls"><button id="brake" class="ridebutton"><span>↓</span>BRAKE<small>HOLD</small></button><div class="controlcenter"><span id="inputmode">← A / D → STEER</span><small id="controlhint">↑ MANUAL · SPACE HOP · SHIFT PUMP</small><button id="motion">ENABLE TILT ↗</button><small class="buildstamp">0.2.0</small></div><button id="pedal" class="ridebutton pedal"><span>↑</span>PEDAL<small>HOLD</small></button></div>
+<div id="diagnostics" class="hidden"><span id="axes"></span><span id="sensorstatus"></span><span id="contactstatus"></span></div>
+<dialog id="help"><button class="close" id="closehelp" aria-label="Close controls">×</button><span class="eyebrow">RIDER'S FIELD GUIDE / 0.2.0</span><h2>Ride with the trail.</h2><p>Brake before the bend, choose your line, then lean into it. The bike now turns independently: leave a turn too late and you can run off the trail.</p><dl><dt>Tilt left / right</dt><dd>Steer. A smaller lean now produces a stronger turn.</dd><dt>Pull the phone toward yourself and hold</dt><dd>Lift and balance the front wheel. Brake or release to bring it down. If it lowers instead, reverse the lift direction below.</dd><dt>Lift deliberately, then tip forward quickly</dt><dd>Bunny hop. A sustained manual hold or a simple release does not trigger a hop.</dd><dt>Press the whole phone downward</dt><dd>Keep its angle steady. Work the back of a roller; return to your holding position to reset. Experimental: requires acceleration access.</dd><dt>Lean in the air, then center</dt><dd>Whip the bike and recover before landing.</dd></dl>
+<div class="settings"><label>Steering response<select id="sensitivity"><option value="19">Gentle</option><option value="15" selected>Responsive</option><option value="11">Sharp</option></select></label><label>Lift direction<select id="liftdirection"><option value="1">Normal</option><option value="-1">Reverse</option></select></label><label>Next run starts at<select id="startsection"><option value="3">Warm-up / full descent</option><option value="103">Berms / practice</option><option value="215">Rollers / practice</option><option value="320">Steep chute / practice</option><option value="415">Roots & rocks / practice</option><option value="615">Jump line / practice</option></select></label><label class="checklabel"><input type="checkbox" id="showdiagnostics"> Show sensor & tire readout</label></div>
+<p class="muted">Desktop: A/D or ←/→ steer · W pedal · S brake · ↑ manual · Space hop · Shift pump · Q/E whip · P pause. Touch fallback: drag left/right to steer, drag down to manual, swipe up to hop. Tilt and downward-motion pumping need Safari over HTTPS.</p><button class="primary" id="calibrate">ENABLE / CALIBRATE ↗</button><small id="permissionstatus">Hold the phone comfortably and still while calibrating.</small></dialog>
 <div id="results" class="panel hidden"><div class="edition">THE TRAIL WINS THIS ONE</div><h2 id="crashreason">You left the trail.</h2><h1 id="finaldistance">0 <em>m</em></h1><p id="runsummary"></p><button class="primary" id="retry">RIDE AGAIN <span>↗</span></button></div>
-<script src="game.js"></script></body></html>
+<div id="fatal" class="hidden"><h2>Graphics could not start</h2><p id="fatalreason"></p></div>
+<script>(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.Singletrack = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const G = 9.81, STEP = 1 / 120, WB = 1.22, RADIUS = 0.32;
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const mix = (a, b, t) => a + (b - a) * t;
+  const smooth = x => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+  const wrap = x => Math.atan2(Math.sin(x), Math.cos(x));
+  const damp = (a, b, rate, dt) => mix(a, b, 1 - Math.exp(-rate * dt));
+  const hash = n => { const v = Math.sin(n * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); };
+  const palettes = [
+    { name: 'REDWOOD FOREST', sky: '#aac5bc', dirt: '#b3966b', ground: '#526749', edge: '#839165', tree: '#284f3c', rock: '#737d6b', grip: 0.97 },
+    { name: 'SLICKROCK', sky: '#c7d0c5', dirt: '#c99870', ground: '#ae7755', edge: '#be8960', tree: '#65744c', rock: '#b48460', grip: 1.08 },
+    { name: 'ROCKS & ROOTS', sky: '#aebfb9', dirt: '#a99571', ground: '#536344', edge: '#71815d', tree: '#334f35', rock: '#788276', grip: 0.80 },
+    { name: 'HIGH DESERT', sky: '#c4d4cd', dirt: '#d6b883', ground: '#ad9968', edge: '#c5ad7d', tree: '#6d754d', rock: '#9f8e6c', grip: 0.83 },
+    { name: 'ALPINE', sky: '#b0d0d6', dirt: '#b1a78a', ground: '#6e8265', edge: '#879378', tree: '#315d50', rock: '#98a29b', grip: 0.91 }
+  ];
+  const kinds = ['FLOW / BERMS', 'ROLLER RUN', 'STEEP CHUTE', 'ROOTS & ROCKS', 'RECOVERY', 'JUMP LINE'];
+  const grades = [-0.10, -0.055, -0.31, -0.16, -0.025, -0.095];
+  function section(s, seed = 17) {
+    const i = Math.max(0, Math.floor(s / 100)), u = s - i * 100;
+    const type = i === 0 ? -1 : (i - 1) % kinds.length;
+    const advanced = clamp((s - 350) / 1700, 0, 1);
+    const sign = hash(i + seed) > 0.5 ? 1 : -1;
+    const amplitudes = [0.079, 0.036, 0.049, 0.072, 0.026, 0.032];
+    const cycles = type === 0 || type === 3 ? 2 : 1;
+    const curvature = type < 0 ? 0.002 * Math.sin(s / 18)
+      : sign * amplitudes[type] * (1 + advanced * 0.22) * Math.sin(u / 100 * Math.PI * 2 * cycles);
+    const currentGrade = type < 0 ? -0.048 : grades[type] * (1 + advanced * 0.22);
+    const previousGrade = i <= 1 ? -0.048 : grades[(i - 2) % kinds.length] * (1 + advanced * 0.22);
+    const grade = mix(previousGrade, currentGrade, smooth(u / 14)) + (type < 0 ? 0 : Math.sin(u * Math.PI * 2 / 100) * 0.018);
+    const bank = type === 0 ? Math.atan(curvature * 7.0) : type === 1 || type === 5 ? Math.atan(curvature * 3.4) : Math.atan(curvature * 1.3);
+    const introWidth = mix(4.2, 3.3, smooth(s / 100));
+    const width = type < 0 ? introWidth : Math.max(1.45, [2.35, 2.2, 2.05, 1.85, 2.45, 2.35][type] - advanced * 0.3) + Math.abs(bank) * 1.75;
+    return { i, u, type, curvature, grade, bank, width, name: type < 0 ? 'WARM-UP' : kinds[type], biome: Math.floor(s / 700) % 5 };
+  }
+  function bumps(s) {
+    const sec = section(s);
+    let h = 0;
+    const mound = (start, length, height) => {
+      const u = (sec.u - start) / length;
+      return u > 0 && u < 1 ? height * Math.sin(Math.PI * u) ** 2 : 0;
+    };
+    if (sec.type < 0) h += mound(42, 13, 0.36) + mound(63, 13, 0.40);
+    if (sec.type === 0) h += mound(83, 12, 0.50);
+    if (sec.type === 1) for (const start of [17, 35, 53, 71]) h += mound(start, 13, 0.75);
+    if (sec.type === 2) h += mound(42, 7, 0.30);
+    if (sec.type === 5) {
+      for (const start of [22, 65]) {
+        const u = sec.u - start;
+        if (u >= 0 && u < 5) h += 1.15 * smooth(u / 5);
+        else if (u < 8 && u >= 5) h += 1.15;
+        else if (u >= 8 && u < 19) h += 1.15 * (1 - smooth((u - 8) / 11));
+      }
+    }
+    return h;
+  }
+  function obstacles(s, seed = 17) {
+    const sec = section(s, seed), result = [];
+    if (sec.type === 3 || sec.type === 2 || sec.biome === 2) {
+      const count = sec.type === 3 ? 8 : 3;
+      for (let j = 0; j < count; j++) {
+        const rock = j % 3 === 2;
+        result.push({ s: sec.i * 100 + 18 + j * (sec.type === 3 ? 9 : 23), n: rock ? (hash(j + sec.i * 7 + seed) - 0.5) * 1.1 : 0,
+          height: rock ? 0.18 + hash(j + sec.i) * 0.20 : 0.10 + hash(j + sec.i) * 0.07,
+          radius: rock ? 0.65 : 0.32, span: rock ? 0.65 : sec.width * 0.60, rock, id: sec.i * 20 + j });
+      }
+    }
+    return result;
+  }
+  class Trail {
+    constructor(seed = 17) { this.seed = seed; this.nodes = new Map(); this.lastIndex = 0; this.firstIndex = 0; this.nodes.set(0, { x: 0, z: 0, y: 0, yaw: 0 }); this.ensure(260); }
+    ensure(s) {
+      const target = Math.ceil(Math.max(0, s) / 2) + 1;
+      while (this.lastIndex < target) {
+        const j = ++this.lastIndex, old = this.nodes.get(j - 1), sec = section(j * 2 - 1, this.seed);
+        const mid = old.yaw + sec.curvature;
+        this.nodes.set(j, { x: old.x + Math.sin(mid) * 2, z: old.z + Math.cos(mid) * 2,
+          y: old.y + sec.grade * 2, yaw: old.yaw + sec.curvature * 2 });
+      }
+    }
+    prune(s) { const keep = Math.max(0, Math.floor((s - 95) / 2)); while (this.firstIndex < keep) this.nodes.delete(this.firstIndex++); }
+    at(s) {
+      s = Math.max(this.firstIndex * 2, s); this.ensure(s);
+      const i = Math.floor(s / 2), a = this.nodes.get(i), b = this.nodes.get(i + 1), t = (s - i * 2) / 2;
+      const yaw = mix(a.yaw, b.yaw, t), sec = section(s, this.seed);
+      return { x: mix(a.x, b.x, t), z: mix(a.z, b.z, t), y: mix(a.y, b.y, t), yaw,
+        rx: Math.cos(yaw), rz: -Math.sin(yaw), tx: Math.sin(yaw), tz: Math.cos(yaw), ...sec, s };
+    }
+    rough(s, n) {
+      let h = 0;
+      for (const ob of obstacles(s, this.seed)) {
+        const ds = (s - ob.s) / ob.radius, dn = (n - ob.n) / ob.span;
+        if (Math.abs(ds) < 2.5 && Math.abs(dn) < 1.6) h += ob.height * Math.exp(-ds * ds * 2 - dn * dn * 2);
+      }
+      return h;
+    }
+    height(s, n = 0) {
+      const p = this.at(s), half = p.width / 2, limitedN = clamp(n, -half - 1.5, half + 1.5);
+      const banking = -Math.tan(p.bank) * limitedN;
+      const outer = p.bank ? Math.max(0, -Math.sign(p.bank) * limitedN - half * 0.65) : 0;
+      const shoulder = Math.max(0, Math.abs(n) - half);
+      const offShape = Math.min(0.65, shoulder * 0.14) + (Math.abs(n) > half + 2 ? Math.sin(s / 7 + n) * 0.1 : 0);
+      return p.y + bumps(s) + banking + outer * outer * Math.abs(p.bank) * 0.36 + this.rough(s, n) + offShape;
+    }
+    point(s, n = 0) { const p = this.at(s); return [p.x + p.rx * n, this.height(s, n), p.z + p.rz * n]; }
+    nearest(x, z, hint = 0, range = 20) {
+      const lo = Math.max(this.firstIndex * 2, Math.floor((hint - range) / 2) * 2), hi = Math.max(lo + 2, hint + range);
+      this.ensure(hi + 2); let closest = null, dist = Infinity;
+      for (let s = lo; s <= hi; s += 2) {
+        const a = this.at(s), b = this.at(s + 2), dx = b.x - a.x, dz = b.z - a.z;
+        const u = clamp(((x - a.x) * dx + (z - a.z) * dz) / (dx * dx + dz * dz), 0, 1);
+        const px = mix(a.x, b.x, u), pz = mix(a.z, b.z, u), d = (x - px) ** 2 + (z - pz) ** 2;
+        if (d < dist) { dist = d; closest = s + u * 2; }
+      }
+      const p = this.at(closest), n = (x - p.x) * p.rx + (z - p.z) * p.rz;
+      return { ...p, n, distance: Math.sqrt(dist), height: this.height(p.s, n) };
+    }
+    contact(x, z, hint) { return this.nearest(x, z, hint, 4); }
+  }
+  class Bike {
+    constructor(trail = new Trail()) { this.trail = trail; this.reset(); }
+    reset(s = 3, speed = 5.5) {
+      const p = this.trail.at(s), h = this.trail.height(s), slope = this.trail.height(s + WB / 2) - this.trail.height(s - WB / 2);
+      Object.assign(this, { x: p.x, z: p.z, y: h + RADIUS + 0.26 - G / 110,
+        vx: p.tx * speed, vz: p.tz * speed, vy: -speed * 0.048, yaw: p.yaw, yawRate: 0, pitch: Math.atan(slope / WB), pitchRate: 0,
+        roll: 0, speed, s, distance: 0, startS: s, n: 0, mode: 'ride', time: 0, frontLoad: G / 2, rearLoad: G / 2,
+        frontContact: true, rearContact: true, frontCompression: G / 110, rearCompression: G / 110,
+        air: false, manual: false, offTime: 0, slide: 0, whip: 0, whipRate: 0, didWhip: false,
+        tricks: 0, landings: 0, pumps: 0, manualTime: 0, pumpAge: 10, pumpPower: 0, hopTime: -10,
+        hopQueued: 0, pumpQueued: 0, airTime: 0, level: 0, event: '', crashReason: '', bank: p.bank, grade: p.grade });
+    }
+    hop(power = 1) { if (this.mode === 'ride' && !this.air && this.time - this.hopTime > 0.65) this.hopQueued = clamp(power, 0.4, 1); }
+    pump(power = 1) { if (this.mode === 'ride' && !this.air && this.pumpAge > 0.55) this.pumpQueued = clamp(power, 0.25, 1); }
+    crash(reason) { this.mode = 'crash'; this.crashReason = reason; this.event = reason; }
+    step(input, dt = STEP) {
+      if (this.mode !== 'ride') return;
+      this.event = ''; this.time += dt;
+      const steer = clamp(input.steer || 0, -1, 1), fore = clamp(input.fore || 0, -1, 1);
+      const pedal = input.pedal ? 1 : 0, brake = input.brake ? 1 : 0;
+      let road = this.trail.nearest(this.x, this.z, this.s, 12);
+      const on = Math.abs(road.n) <= road.width / 2 + 0.12;
+      this.speed = Math.hypot(this.vx, this.vz);
+      const sx = Math.sin(this.yaw), cz = Math.cos(this.yaw), rx = cz, rz = -sx;
+      const f = this.trail.contact(this.x + sx * WB / 2, this.z + cz * WB / 2, road.s + WB / 2);
+      const r = this.trail.contact(this.x - sx * WB / 2, this.z - cz * WB / 2, road.s - WB / 2);
+      const slopePitch = Math.atan2(f.height - r.height, WB);
+      const targetLift = Math.max(0, fore - 0.12) * 0.78 * (1 - brake * 0.90);
+      const targetPitch = slopePitch + targetLift;
+      if (!this.air || this.airTime < 0.06) {
+        this.pitchRate += ((targetPitch - this.pitch) * 38 - this.pitchRate * 10) * dt;
+      } else this.pitchRate += (fore * 2.0 - this.pitchRate * 1.7) * dt;
+      this.pitch = clamp(this.pitch + this.pitchRate * dt, -1.30, 1.55);
+      const lift = Math.sin(this.pitch) * WB / 2, pitchV = Math.cos(this.pitch) * this.pitchRate * WB / 2;
+      const frontGap = this.y + lift - RADIUS - f.height, rearGap = this.y - lift - RADIUS - r.height;
+      const forwardGrade = (f.height - r.height) / WB;
+      const groundVy = this.speed * Math.sin(slopePitch);
+      const frontV = this.vy + pitchV - groundVy, rearV = this.vy - pitchV - groundVy;
+      let frontForce = frontGap < 0.26 ? clamp((0.26 - frontGap) * 55 - frontV * 3.7, 0, 36) : 0;
+      let rearForce = rearGap < 0.26 ? clamp((0.26 - rearGap) * 55 - rearV * 3.7, 0, 36) : 0;
+      if (this.hopQueued) {
+        this.vy = Math.max(this.vy, groundVy) + 4.0 * this.hopQueued;
+        this.hopQueued = 0; this.hopTime = this.time; this.air = true; this.airTime = 0;
+        frontForce = rearForce = 0; this.event = 'BUNNY HOP';
+      }
+      if (this.pumpQueued) { this.pumpAge = 0; this.pumpPower = this.pumpQueued; this.pumpQueued = 0; this.pumps++; }
+      this.pumpAge += dt;
+      const pump = !this.air && this.pumpAge < 0.32 ? Math.sin(Math.PI * this.pumpAge / 0.32) * this.pumpPower : 0;
+      const wasAir = this.air;
+      this.frontLoad = damp(this.frontLoad, frontForce, 20, dt); this.rearLoad = damp(this.rearLoad, rearForce, 20, dt);
+      this.frontContact = frontForce > 0.25; this.rearContact = rearForce > 0.25;
+      this.frontCompression = clamp(0.26 - frontGap, 0, 0.28); this.rearCompression = clamp(0.26 - rearGap, 0, 0.28);
+      if (!this.frontContact && !this.rearContact && this.time - this.hopTime > 0.10) this.air = true;
+      if (this.air) this.airTime += dt;
+      if (wasAir && (this.frontContact || this.rearContact) && this.vy < groundVy && this.airTime > 0.15) {
+        const impact = Math.max(0, (groundVy - this.vy) * Math.cos(slopePitch));
+        if (impact > 10.5 || Math.abs(wrap(this.whip)) > 0.90) { this.crash(impact > 10.5 ? 'That landing was too hard.' : 'Straighten the bike before landing.'); return; }
+        this.air = false; this.airTime = 0; this.landings++;
+        if (this.didWhip) { this.tricks++; this.event = 'WHIP / CLEAN LANDING'; } else if (impact > 2) this.event = 'CLEAN LANDING';
+        this.didWhip = false; this.whip = this.whipRate = 0;
+        const loss = clamp(1 - impact * 0.018, 0.80, 1); this.vx *= loss; this.vz *= loss;
+      }
+      this.vy += (frontForce + rearForce - G - pump * 4.2) * dt;
+      this.y += this.vy * dt;
+      // Stop pathological numerical penetration; normal riding uses the two damped contacts above.
+      const lowerBound = Math.min(f.height, r.height) + RADIUS - 0.20;
+      if (this.y < lowerBound) { this.y = lowerBound; this.vy = Math.max(0, this.vy); }
+      this.manual = !this.air && !this.frontContact && this.rearContact && this.pitch - slopePitch > 0.15;
+      if (this.manual) this.manualTime += dt;
+      if (this.air) {
+        this.whipRate += (steer * 7.0 + (input.whip || 0) * 7.0 - this.whip * 5.0 - this.whipRate * 3.2) * dt;
+        this.whip += this.whipRate * dt;
+        if (Math.abs(this.whip) > 0.45) this.didWhip = true;
+      }
+      const manualSteering = this.manual ? 0.32 : 1;
+      const delta = steer * 0.31 / (1 + this.speed * 0.075);
+      const desiredYaw = this.air ? this.yawRate * 0.97 : this.speed / WB * Math.tan(delta) * manualSteering;
+      this.yawRate = damp(this.yawRate, desiredYaw, this.air ? 1 : 8, dt);
+      this.yaw += this.yawRate * dt;
+      const latV = this.vx * rx + this.vz * rz;
+      const alongV = this.vx * sx + this.vz * cz;
+      let mu = palettes[road.biome].grip + (this.level >= 2 ? 0.10 : 0);
+      if (!on) mu *= 0.56;
+      const load = clamp(frontForce + rearForce, 0, 20);
+      const support = Math.min(1, load / G);
+      const traction = mu * load;
+      const braking = Math.min(brake * 8.2, traction * 0.96);
+      const lateralCapacity = Math.sqrt(Math.max(0, traction * traction - braking * braking));
+      const lateralSlope = (this.trail.height(road.s, road.n + 0.10) - this.trail.height(road.s, road.n - 0.10)) / 0.20;
+      const bankAccel = -G * lateralSlope / Math.sqrt(1 + lateralSlope * lateralSlope) * support;
+      const bankBike = bankAccel * (road.rx * rx + road.rz * rz);
+      const need = -latV * 6.0 + this.yawRate * this.speed * 0.50 - bankBike;
+      const tireForce = this.air ? 0 : clamp(need, -lateralCapacity, lateralCapacity);
+      this.slide = damp(this.slide, !this.air ? clamp((Math.abs(need) - lateralCapacity) / 10, 0, 1) : 0, 5, dt);
+      const drag = 0.014 * this.speed * this.speed + (!this.air ? 0.26 + (on ? 0 : 1.6) : 0.06);
+      const drive = (pedal * (3.0 + this.level * 0.10) - braking) * support;
+      const gradeAccel = -G * forwardGrade / Math.sqrt(1 + forwardGrade * forwardGrade) * support;
+      const pumpAlong = -pump * 7.0 * forwardGrade / Math.sqrt(1 + forwardGrade * forwardGrade);
+      const longitudinal = drive + gradeAccel + pumpAlong - drag;
+      if (alongV < 0.2 && longitudinal < 0) {
+        this.vx *= Math.exp(-dt * 12); this.vz *= Math.exp(-dt * 12);
+      } else {
+        this.vx += ((longitudinal * sx + tireForce * rx) + bankAccel * road.rx) * dt;
+        this.vz += ((longitudinal * cz + tireForce * rz) + bankAccel * road.rz) * dt;
+      }
+      const maxSpeed = 25;
+      const v = Math.hypot(this.vx, this.vz); if (v > maxSpeed) { this.vx *= maxSpeed / v; this.vz *= maxSpeed / v; }
+      this.x += this.vx * dt; this.z += this.vz * dt;
+      this.speed = Math.hypot(this.vx, this.vz);
+      road = this.trail.nearest(this.x, this.z, road.s, 8);
+      this.s = road.s; this.n = road.n; this.bank = road.bank; this.grade = road.grade;
+      this.distance = Math.max(this.distance, this.s - this.startS);
+      this.level = Math.min(3, Math.floor(this.distance / 500));
+      const targetRoll = Math.atan(this.yawRate * this.speed / G);
+      this.roll = damp(this.roll, clamp(targetRoll, -0.8, 0.8), 6, dt);
+      const outside = Math.abs(this.n) > road.width / 2 + 0.22;
+      this.offTime = outside ? this.offTime + dt : Math.max(0, this.offTime - dt * 2);
+      if (this.offTime > (this.speed > 1.3 ? 0.40 : 1.1)) this.crash(this.slide > 0.2 ? 'Too much speed. The tires washed out.' : 'You missed the trail.');
+      if (Math.abs(this.n) > road.width / 2 + 3) this.crash('You rode off the trail.');
+      if (this.pitch > 1.40 && !this.air) this.crash('Too far back. Cover the brake.');
+      if (this.event === '' && pump > 0.7 && forwardGrade < -0.06) this.event = 'PUMP / DRIVE THE TRANSITION';
+      this.trail.ensure(this.s + 245); this.trail.prune(this.s);
+    }
+  }
+  return { G, STEP, WB, RADIUS, clamp, mix, smooth, wrap, damp, hash, palettes, section, bumps, obstacles, Trail, Bike };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.RiderMotion = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const DEG = Math.PI / 180, clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const multiply = (a, b) => [
+    a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1],
+    a[3] * b[1] - a[0] * b[2] + a[1] * b[3] + a[2] * b[0],
+    a[3] * b[2] + a[0] * b[1] - a[1] * b[0] + a[2] * b[3],
+    a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2]
+  ];
+  const inverse = q => [-q[0], -q[1], -q[2], q[3]];
+  const rotate = (q, v) => multiply(multiply(q, [...v, 0]), inverse(q)).slice(0, 3);
+  function quaternion(alpha, beta, gamma) {
+    const a = (alpha || 0) * DEG / 2, b = beta * DEG / 2, g = gamma * DEG / 2;
+    return multiply(multiply([0, 0, Math.sin(a), Math.cos(a)], [Math.sin(b), 0, 0, Math.cos(b)]), [0, Math.sin(g), 0, Math.cos(g)]);
+  }
+  function relativeRotation(base, current) {
+    let q = multiply(inverse(base), current);
+    if (q[3] < 0) q = q.map(v => -v);
+    const len = Math.hypot(q[0], q[1], q[2]);
+    if (len < 1e-8) return [0, 0, 0];
+    const angle = 2 * Math.atan2(len, clamp(q[3], -1, 1));
+    return q.slice(0, 3).map(v => v * angle / len / DEG);
+  }
+  function deadzone(v, size) { return Math.sign(v) * Math.max(0, Math.abs(v) - size); }
+  class Controls {
+    constructor() {
+      this.invertFore = 1; this.sensitivity = 15;
+      this.q = [0, 0, 0, 1]; this.base = null; this.enabled = false; this.angle = null;
+      this.steer = 0; this.fore = 0; this.steerDegrees = 0; this.foreDegrees = 0;
+      this.orientationAt = -100; this.motionAt = -100; this.down = 0; this.hasAcceleration = false;
+      this.resetGestures();
+    }
+    resetGestures() {
+      this.hopStage = 'neutral'; this.liftAt = -100; this.liftDwell = 0; this.oldFore = 0;
+      this.hopPending = false; this.hopCooldown = 0;
+      this.pumpStage = 'neutral'; this.pumpStart = -100; this.pumpRecoveryUntil = 0;
+      this.pumpVelocity = 0; this.pumpPeak = 0; this.pumpForeStart = 0;
+      this.pumpPending = 0; this.neutralMotionTime = 0;
+    }
+    calibrate(now) {
+      this.base = null; this.calibrationStart = now; this.calibrationCount = 0; this.sumQ = [0, 0, 0, 0];
+      this.ready = false; this.steer = this.fore = 0; this.resetGestures();
+    }
+    start(now) { this.enabled = true; this.calibrate(now); }
+    orientation(event, now, screenAngle = 0) {
+      if (!this.enabled || !Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
+      if (this.angle !== null && this.angle !== screenAngle) this.calibrate(now);
+      this.angle = screenAngle;
+      const dt = clamp(now - this.orientationAt, 0.005, 0.12); this.orientationAt = now;
+      this.q = quaternion(event.alpha, event.beta, event.gamma);
+      if (!this.base) {
+        let q = this.q;
+        if (this.calibrationCount && this.sumQ.reduce((sum, v, i) => sum + v * q[i], 0) < 0) q = q.map(v => -v);
+        for (let i = 0; i < 4; i++) this.sumQ[i] += q[i];
+        this.calibrationCount++;
+        if (now - this.calibrationStart >= 0.3 && this.calibrationCount >= 5) {
+          const len = Math.hypot(...this.sumQ); this.base = this.sumQ.map(v => v / len);
+          this.ready = true; this.gestureWarmupUntil = now + 0.35;
+        }
+        return;
+      }
+      const r = relativeRotation(this.base, this.q), a = screenAngle * DEG;
+      const steerDegrees = r[1] * Math.cos(a) + r[0] * Math.sin(a);
+      const foreDegrees = (r[0] * Math.cos(a) - r[1] * Math.sin(a)) * this.invertFore;
+      this.steerDegrees = steerDegrees; this.foreDegrees = foreDegrees;
+      const gain = 1 - Math.exp(-dt / 0.065);
+      this.steer += (clamp(deadzone(steerDegrees, 1.0) / this.sensitivity, -1, 1) - this.steer) * gain;
+      this.fore += (clamp(deadzone(foreDegrees, 1.0) / 19, -1, 1) - this.fore) * gain;
+      const rate = (this.fore - this.oldFore) / dt;
+      if (now > this.gestureWarmupUntil && now > this.hopCooldown) {
+        if (this.hopStage === 'neutral' && this.fore > 0.64) {
+          this.hopStage = 'lift'; this.liftAt = now; this.liftDwell = 0;
+        } else if (this.hopStage === 'lift') {
+          if (this.fore > 0.55) this.liftDwell += dt;
+          const age = now - this.liftAt;
+          if (age > 0.82) this.hopStage = 'hold';
+          else if (this.fore < -0.31 && rate < -1.4 && age > 0.12 && this.liftDwell > 0.065) {
+            this.hopPending = true; this.hopStage = 'hold'; this.hopCooldown = now + 0.75;
+          }
+        }
+        if (this.hopStage === 'hold' && Math.abs(this.fore) < 0.14) this.hopStage = 'neutral';
+      }
+      this.oldFore = this.fore;
+    }
+    motion(event, now) {
+      if (!this.enabled) return;
+      const dt = clamp(now - this.motionAt, 0.005, 0.08); this.motionAt = now;
+      const a = event.acceleration, ag = event.accelerationIncludingGravity;
+      let values = a && [a.x, a.y, a.z].every(Number.isFinite) ? [a.x, a.y, a.z] : null;
+      const downAxis = rotate(inverse(this.q), [0, 0, -1]);
+      if (!values && ag && [ag.x, ag.y, ag.z].every(Number.isFinite)) {
+        values = [ag.x, ag.y, ag.z].map((v, i) => v - downAxis[i] * 9.81);
+      }
+      if (!values) { this.hasAcceleration = false; this.down = 0; return; }
+      this.hasAcceleration = true;
+      const raw = values.reduce((sum, v, i) => sum + v * downAxis[i], 0);
+      this.down += (raw - this.down) * (1 - Math.exp(-dt / 0.035));
+      if (!this.ready || now < this.gestureWarmupUntil) return;
+      if (this.pumpStage === 'recovery') {
+        this.neutralMotionTime = Math.abs(this.down) < 0.75 ? this.neutralMotionTime + dt : 0;
+        if (now > this.pumpRecoveryUntil && this.neutralMotionTime > 0.12) this.pumpStage = 'neutral';
+        return;
+      }
+      if (this.pumpStage === 'neutral' && this.down > 1.8) {
+        this.pumpStage = 'press'; this.pumpStart = now; this.pumpPeak = this.down;
+        this.pumpVelocity = 0; this.pumpForeStart = this.foreDegrees;
+      }
+      if (this.pumpStage === 'press') {
+        const age = now - this.pumpStart;
+        this.pumpVelocity += this.down * dt; this.pumpPeak = Math.max(this.pumpPeak, this.down);
+        if (Math.abs(this.foreDegrees - this.pumpForeStart) > 7 || age > 0.46) {
+          this.pumpStage = 'recovery'; this.pumpRecoveryUntil = now + 0.45; this.neutralMotionTime = 0;
+        } else if (age > 0.07 && this.down < -0.65 && this.pumpVelocity > 0.03 && this.pumpPeak > 2.0) {
+          this.pumpPending = clamp(this.pumpPeak / 5, 0.4, 1);
+          this.pumpStage = 'recovery'; this.pumpRecoveryUntil = now + 0.62; this.neutralMotionTime = 0;
+        }
+      }
+    }
+    read(now) {
+      const stale = now - this.orientationAt > 0.45;
+      const result = { steer: stale ? 0 : this.steer, fore: stale ? 0 : this.fore,
+        hop: this.hopPending && !stale, pump: this.pumpPending && !stale ? this.pumpPending : 0,
+        ready: this.ready && !stale, pumpAvailable: this.hasAcceleration && now - this.motionAt < 0.45 };
+      this.hopPending = false; this.pumpPending = 0;
+      if (stale) this.resetGestures();
+      return result;
+    }
+  }
+  return { Controls, quaternion, multiply, inverse, rotate, relativeRotation };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('./physics.js') : root.Singletrack);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.TrailRenderer = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (S) {
+  'use strict';
+  const color = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const normalize = v => { const l = Math.hypot(...v) || 1; return v.map(x => x / l); };
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const dot = (a, b) => a.reduce((sum, v, i) => sum + v * b[i], 0);
+  function perspective(aspect) {
+    const f = 1 / Math.tan(72 * Math.PI / 360), near = 0.12, far = 1100, nf = 1 / (near - far);
+    return new Float32Array([f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (far + near) * nf, -1, 0, 0, 2 * far * near * nf, 0]);
+  }
+  function view(position, yaw, pitch, roll) {
+    const forward = [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch)];
+    const right = [Math.cos(yaw), 0, -Math.sin(yaw)], up = cross(forward, right);
+    const rolledUp = up.map((v, i) => v * Math.cos(roll) + right[i] * Math.sin(roll));
+    // The riding world uses +Z forward and +X rider-right; preserve that screen convention.
+    const z = forward.map(v => -v), x = normalize(cross(z, rolledUp)), y = cross(x, z);
+    return new Float32Array([x[0], y[0], z[0], 0, x[1], y[1], z[1], 0, x[2], y[2], z[2], 0,
+      -dot(x, position), -dot(y, position), -dot(z, position), 1]);
+  }
+  function buildScene(trail, s) {
+    const origin = trail.point(s), data = [];
+    const sun = normalize([-0.35, 0.9, -0.2]);
+    function triangle(a, b, c, hex, shade = 1) {
+      const n = normalize(cross(b.map((v, i) => v - a[i]), c.map((v, i) => v - a[i])));
+      if (n[1] < 0) for (let i = 0; i < 3; i++) n[i] *= -1;
+      const light = (0.72 + Math.max(0, dot(n, sun)) * 0.28) * shade, rgb = typeof hex === 'string' ? color(hex) : hex;
+      for (const p of [a, b, c]) data.push(p[0] - origin[0], p[1] - origin[1], p[2] - origin[2], ...rgb.map(v => v * light));
+    }
+    const lo = Math.max(trail.firstIndex * 2, s - 55), hi = s + 235, rows = [];
+    for (let at = Math.floor(lo / 2) * 2; at < hi; at += 2) rows.push(at);
+    // Extra contact-surface samples preserve the small roots/rocks in both geometry and physics.
+    for (let i = Math.floor(lo / 100); i <= Math.floor(hi / 100); i++) {
+      for (const ob of S.obstacles(i * 100 + 25, trail.seed)) {
+        for (const ds of [-ob.radius * 1.5, -ob.radius * 0.6, 0, ob.radius * 0.6, ob.radius * 1.5]) {
+          if (ob.s + ds > lo && ob.s + ds < hi) rows.push(ob.s + ds);
+        }
+      }
+    }
+    rows.sort((a, b) => a - b);
+    const offsets = at => {
+      const h = trail.at(at).width / 2;
+      return [-14, -7, -3.6, -h - 0.30, -h, -h * 0.50, 0, h * 0.50, h, h + 0.30, 3.6, 7, 14];
+    };
+    for (let j = 0; j < rows.length - 1; j++) {
+      const a = rows[j], b = rows[j + 1]; if (b - a < 0.01) continue;
+      const na = offsets(a), nb = offsets(b), pal = S.palettes[trail.at(a).biome];
+      for (let i = 0; i < na.length - 1; i++) {
+        const A = trail.point(a, na[i]), B = trail.point(a, na[i + 1]), C = trail.point(b, nb[i]), D = trail.point(b, nb[i + 1]);
+        const dirt = i >= 4 && i < 8, edge = i === 3 || i === 8;
+        const hex = dirt ? pal.dirt : edge ? pal.edge : pal.ground;
+        const shade = dirt ? 0.96 + S.hash(Math.floor(a / 5) * 11 + i) * 0.08 : 0.88 + S.hash(j + i * 24) * 0.15;
+        triangle(A, C, B, hex, shade); triangle(B, C, D, hex, shade * 0.98);
+      }
+    }
+    function cone(x, y, z, radius, height, hex, sides = 5) {
+      for (let i = 0; i < sides; i++) {
+        const a = i / sides * Math.PI * 2, b = (i + 1) / sides * Math.PI * 2;
+        triangle([x + Math.cos(a) * radius, y, z + Math.sin(a) * radius], [x, y + height, z],
+          [x + Math.cos(b) * radius, y, z + Math.sin(b) * radius], hex, 0.83 + i / sides * 0.17);
+      }
+    }
+    function trunk(x, y, z, radius, height) {
+      for (let i = 0; i < 5; i++) {
+        const a = i / 5 * Math.PI * 2, b = (i + 1) / 5 * Math.PI * 2;
+        const A = [x + Math.cos(a) * radius, y, z + Math.sin(a) * radius], B = [x + Math.cos(b) * radius, y, z + Math.sin(b) * radius];
+        const C = [A[0], y + height, A[2]], D = [B[0], y + height, B[2]];
+        triangle(A, B, C, '#65513c'); triangle(B, D, C, '#65513c');
+      }
+    }
+    for (let at = Math.ceil(lo / 5) * 5; at < hi; at += 5) {
+      const node = trail.at(at), pal = S.palettes[node.biome];
+      for (const side of [-1, 1]) {
+        const k = at * 0.2 + (side + 1) * 94 + trail.seed;
+        const n = side * (node.width / 2 + 1.8 + S.hash(k) * 8.8), p = trail.point(at, n);
+        if (node.biome === 1 || node.biome === 3) {
+          const r = 0.35 + S.hash(k + 3) * 1.15;
+          cone(...p, r, r * 1.1, pal.rock, 5);
+          if (node.biome === 3 && S.hash(k) > 0.7) cone(p[0], p[1], p[2], 0.5, 2.3, pal.tree, 4);
+        } else {
+          const tall = node.biome === 0 ? 13 + S.hash(k + 9) * 10 : 6 + S.hash(k + 9) * 7;
+          trunk(...p, node.biome === 0 ? 0.38 : 0.24, tall);
+          cone(p[0], p[1] + tall * 0.38, p[2], 2.0 + S.hash(k) * 1.3, tall * 0.65, pal.tree);
+          cone(p[0], p[1] + tall * 0.65, p[2], 1.45, tall * 0.43, pal.tree);
+        }
+      }
+    }
+    for (let i = Math.floor(lo / 100); i <= Math.floor(hi / 100); i++) {
+      const pal = S.palettes[trail.at(i * 100 + 25).biome];
+      for (const ob of S.obstacles(i * 100 + 25, trail.seed)) {
+        if (ob.s < lo || ob.s > hi) continue;
+        const ns = ob.rock ? [-ob.span, 0, ob.span] : [-ob.span, -ob.span * 0.5, 0, ob.span * 0.5, ob.span];
+        const ds = [-ob.radius, 0, ob.radius];
+        for (let a = 0; a < ds.length - 1; a++) for (let b = 0; b < ns.length - 1; b++) {
+          const A = trail.point(ob.s + ds[a], ob.n + ns[b]), B = trail.point(ob.s + ds[a], ob.n + ns[b + 1]);
+          const C = trail.point(ob.s + ds[a + 1], ob.n + ns[b]), D = trail.point(ob.s + ds[a + 1], ob.n + ns[b + 1]);
+          for (const p of [A, B, C, D]) p[1] += 0.014;
+          triangle(A, C, B, ob.rock ? pal.rock : '#77634b'); triangle(B, C, D, ob.rock ? pal.rock : '#77634b');
+        }
+      }
+    }
+    // Distant faceted mountains stay in world space; yawing the bike reveals a different view.
+    for (let i = 0; i < 24; i++) {
+      const a = i / 24 * Math.PI * 2, b = (i + 1) / 24 * Math.PI * 2, mid = (a + b) / 2;
+      const base = origin[1] - 65, radius = 650;
+      triangle([origin[0] + Math.sin(a) * radius, base, origin[2] + Math.cos(a) * radius],
+        [origin[0] + Math.sin(mid) * radius, origin[1] + 40 + S.hash(i + 84) * 90, origin[2] + Math.cos(mid) * radius],
+        [origin[0] + Math.sin(b) * radius, base, origin[2] + Math.cos(b) * radius], '#758d7f', 0.9);
+    }
+    return { data: new Float32Array(data), origin, vertexCount: data.length / 6 };
+  }
+  class Renderer {
+    constructor(canvas) {
+      this.canvas = canvas; this.gl = canvas.getContext('webgl', { alpha: false, antialias: false, powerPreference: 'high-performance' });
+      if (!this.gl) throw new Error('This browser could not start WebGL. Please open the game in Safari.');
+      this.init(); this.sceneS = -1000; this.camera = null;
+    }
+    init() {
+      const gl = this.gl;
+      function shader(type, source) {
+        const s = gl.createShader(type); gl.shaderSource(s, source); gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+        return s;
+      }
+      const vs = shader(gl.VERTEX_SHADER, 'attribute vec3 p; attribute vec3 c; uniform mat4 projection; uniform mat4 camera; varying vec3 rgb; varying float distance; void main(){vec4 eye=camera*vec4(p,1.0);gl_Position=projection*eye;rgb=c;distance=length(eye.xyz);}');
+      const fs = shader(gl.FRAGMENT_SHADER, 'precision mediump float; varying vec3 rgb; varying float distance; uniform vec3 fog; void main(){float f=smoothstep(55.0,245.0,distance);gl_FragColor=vec4(mix(rgb,fog,f*0.96),1.0);}');
+      const program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+      gl.useProgram(program); this.program = program;
+      this.locations = { p: gl.getAttribLocation(program, 'p'), c: gl.getAttribLocation(program, 'c'),
+        projection: gl.getUniformLocation(program, 'projection'), camera: gl.getUniformLocation(program, 'camera'), fog: gl.getUniformLocation(program, 'fog') };
+      this.buffer = gl.createBuffer(); gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+      gl.enableVertexAttribArray(this.locations.p); gl.vertexAttribPointer(this.locations.p, 3, gl.FLOAT, false, 24, 0);
+      gl.enableVertexAttribArray(this.locations.c); gl.vertexAttribPointer(this.locations.c, 3, gl.FLOAT, false, 24, 12);
+    }
+    resize(w, h, dpr) {
+      this.canvas.width = Math.floor(w * dpr); this.canvas.height = Math.floor(h * dpr);
+      this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+      this.gl.uniformMatrix4fv(this.locations.projection, false, perspective(w / h));
+    }
+    reset() { this.sceneS = -1000; this.camera = null; }
+    draw(trail, bike, dt, force = false) {
+      const gl = this.gl;
+      if (Math.abs(bike.s - this.sceneS) > 12 || force) {
+        this.scene = buildScene(trail, bike.s); this.sceneS = bike.s;
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer); gl.bufferData(gl.ARRAY_BUFFER, this.scene.data, gl.STATIC_DRAW);
+      }
+      if (!this.camera) this.camera = { yaw: bike.yaw, pitch: bike.pitch - 0.02, roll: 0 };
+      this.camera.yaw += S.wrap(bike.yaw - this.camera.yaw) * (1 - Math.exp(-dt * 15));
+      this.camera.pitch = S.damp(this.camera.pitch, S.clamp(bike.pitch * 0.7 + Math.atan(bike.grade) * 0.3 - 0.02, -0.65, 0.7), 7, dt);
+      this.camera.roll = S.damp(this.camera.roll, bike.roll * 0.36, 8, dt);
+      const pos = [bike.x - this.scene.origin[0], bike.y + 1.04 - this.scene.origin[1], bike.z - this.scene.origin[2]];
+      const sky = color(S.palettes[trail.at(bike.s).biome].sky);
+      gl.clearColor(...sky, 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.uniform3fv(this.locations.fog, sky); gl.uniformMatrix4fv(this.locations.camera, false, view(pos, this.camera.yaw, this.camera.pitch, this.camera.roll));
+      gl.drawArrays(gl.TRIANGLES, 0, this.scene.vertexCount);
+    }
+  }
+  return { Renderer, buildScene, perspective, view };
+});
+
+(function () {
+  'use strict';
+  const S = Singletrack, $ = id => document.getElementById(id), now = () => performance.now() / 1000;
+  const canvas = $('world'), cockpit = $('cockpit'), ctx = cockpit.getContext('2d');
+  const motion = new RiderMotion.Controls(); let renderer;
+  let width = innerWidth, height = innerHeight, dpr = 1;
+  let trail = new S.Trail(17), bike = new S.Bike(trail), mode = 'intro', practice = false;
+  let keys = {}, touch = { steer: 0, fore: 0 }, held = { pedal: false, brake: false };
+  let best = 0, noticesUntil = 0, lastNotice = '', lastEventAt = -100, level = 0;
+  let audio, oscillator, gain, sound = false, firstDataAnnounced = false, motionAttempt = 0;
+  let fps = 60, shownAt = 0, lastFrame = now(), accumulator = 0, wasManual = false;
+  try { best = Number(localStorage.getItem('singletrack-v02-best')) || 0; } catch (_) {}
+  $('best').textContent = `BEST ${Math.floor(best)} M`;
+  function notify(text, seconds = 2) {
+    if (text === lastNotice && now() < noticesUntil) return;
+    lastNotice = text; $('message').textContent = text; noticesUntil = now() + seconds;
+  }
+  function resize() {
+    width = innerWidth; height = innerHeight; dpr = Math.min(devicePixelRatio || 1, 1.5);
+    cockpit.width = Math.round(width * dpr); cockpit.height = Math.round(height * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (renderer) renderer.resize(width, height, dpr);
+  }
+  try { renderer = new TrailRenderer.Renderer(canvas); resize(); } catch (e) {
+    $('fatal').classList.remove('hidden'); $('fatalreason').textContent = e.message; $('intro').classList.add('hidden'); return;
+  }
+  bike.reset(32, 0); renderer.reset();
+  addEventListener('resize', resize);
+  function clearHeld() {
+    keys = {}; touch.steer = touch.fore = 0; held.pedal = held.brake = false;
+    $('pedal').classList.remove('held'); $('brake').classList.remove('held');
+  }
+  function start() {
+    clearHeld(); trail = new S.Trail(17); bike = new S.Bike(trail);
+    const startAt = Number($('startsection').value); practice = startAt > 10;
+    bike.reset(startAt, practice ? 6.5 : 5.5); renderer.reset(); mode = 'ride';
+    motion.resetGestures(); motion.gestureWarmupUntil = now() + 0.4;
+    $('intro').classList.add('hidden'); $('results').classList.add('hidden'); $('controls').style.display = 'flex';
+    $('trailinfo').style.display = 'none'; $('sectionhud').classList.add('riding'); $('pause').textContent = 'Ⅱ';
+    level = 0; wasManual = false; accumulator = 0;
+    notify(practice ? `PRACTICE / ${trail.at(startAt).name}` : 'FIND YOUR LINE');
+  }
+  function finish() {
+    mode = 'crash'; clearHeld();
+    $('crashreason').textContent = bike.crashReason;
+    $('finaldistance').innerHTML = `${Math.floor(bike.distance)} <em>m</em>`;
+    if (!practice) { best = Math.max(best, bike.distance); try { localStorage.setItem('singletrack-v02-best', String(best)); } catch (_) {} }
+    $('best').textContent = `BEST ${Math.floor(best)} M`;
+    $('runsummary').textContent = `${practice ? 'Practice · ' : ''}${bike.tricks} whips · ${bike.landings} landings · ${bike.manualTime.toFixed(1)}s manual · ${bike.pumps} pumps`;
+    $('results').classList.remove('hidden'); $('controls').style.display = 'none'; $('message').textContent = '';
+    motion.resetGestures();
+  }
+  function pause() {
+    if (mode === 'ride') { mode = 'paused'; bike.mode = 'paused'; clearHeld(); motion.resetGestures(); $('pause').textContent = '▶'; notify('PAUSED', 3600); }
+    else if (mode === 'paused' && !$('help').open) {
+      mode = 'ride'; bike.mode = 'ride'; motion.resetGestures(); motion.gestureWarmupUntil = now() + 0.4;
+      $('pause').textContent = 'Ⅱ'; $('message').textContent = ''; noticesUntil = 0;
+    }
+  }
+  function showHelp() { if (mode === 'ride') pause(); $('help').showModal(); }
+  function hideHelp() { $('help').close(); if (mode === 'paused') pause(); }
+  function screenAngle() { return screen.orientation && Number.isFinite(screen.orientation.angle) ? screen.orientation.angle : Number(window.orientation) || 0; }
+  async function enableMotion() {
+    if (typeof DeviceOrientationEvent === 'undefined') { notify('NO TILT SENSOR / USE TOUCH'); return; }
+    const attempt = ++motionAttempt;
+    // Both permission requests begin synchronously inside the user gesture, before awaiting either.
+    const orientationPermission = typeof DeviceOrientationEvent.requestPermission === 'function' ? DeviceOrientationEvent.requestPermission() : Promise.resolve('granted');
+    const motionPermission = typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function'
+      ? DeviceMotionEvent.requestPermission() : Promise.resolve('granted');
+    const results = await Promise.allSettled([orientationPermission, motionPermission]);
+    if (results[0].status !== 'fulfilled' || results[0].value !== 'granted') {
+      notify('TILT DECLINED / TOUCH CONTROLS'); $('permissionstatus').textContent = 'Tilt access was declined. Touch and keyboard still work.'; return;
+    }
+    motion.start(now()); firstDataAnnounced = false;
+    const pumpAllowed = results[1].status === 'fulfilled' && results[1].value === 'granted';
+    $('permissionstatus').textContent = pumpAllowed ? 'Hold the phone still for half a second.' : 'Tilt enabled. Pump acceleration access was declined.';
+    $('inputmode').textContent = 'TILT TO STEER'; $('controlhint').textContent = 'HOLD LIFT / MANUAL · PRESS DOWN / PUMP';
+    $('motion').textContent = 'CALIBRATE ↗'; $('enableintro').textContent = 'CALIBRATE MOTION ↗';
+    notify('HOLD STILL / CALIBRATING');
+    setTimeout(() => {
+      if (attempt !== motionAttempt) return;
+      if (!motion.ready) {
+        motion.enabled = false; $('inputmode').textContent = 'DRAG TO STEER · SWIPE UP TO HOP';
+        $('motion').textContent = 'RETRY MOTION ↗'; $('enableintro').textContent = 'RETRY MOTION ↗';
+        notify('NO SENSOR DATA / TOUCH CONTROLS', 3);
+      } else if (!motion.hasAcceleration) $('permissionstatus').textContent = 'Tilt is working. No pump acceleration data yet; press down to test.';
+    }, 2200);
+  }
+  function calibrate() {
+    if (!motion.enabled) return enableMotion();
+    motion.calibrate(now()); firstDataAnnounced = false; notify('HOLD STILL / CALIBRATING');
+  }
+  addEventListener('deviceorientation', e => motion.orientation(e, now(), screenAngle()));
+  addEventListener('devicemotion', e => motion.motion(e, now()));
+  $('ride').onclick = start; $('retry').onclick = start; $('pause').onclick = pause;
+  $('guide').onclick = showHelp; $('closehelp').onclick = hideHelp;
+  $('help').addEventListener('cancel', () => setTimeout(() => { if (mode === 'paused') pause(); }, 0));
+  $('motion').onclick = calibrate; $('enableintro').onclick = calibrate;
+  $('calibrate').onclick = () => { calibrate(); hideHelp(); };
+  $('sensitivity').onchange = e => { motion.sensitivity = Number(e.target.value); };
+  $('liftdirection').onchange = e => { motion.invertFore = Number(e.target.value); motion.resetGestures(); motion.fore = motion.oldFore = 0; };
+  $('showdiagnostics').onchange = e => $('diagnostics').classList.toggle('hidden', !e.target.checked);
+  addEventListener('keydown', e => {
+    if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName) || $('help').open) return;
+    if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
+    keys[e.key.toLowerCase()] = true;
+    if (mode === 'ride' && !e.repeat) { if (e.code === 'Space') bike.hop(); if (e.key === 'Shift') bike.pump(); }
+    if (e.key.toLowerCase() === 'p' && !e.repeat) pause();
+  });
+  addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+  addEventListener('blur', () => { clearHeld(); if (mode === 'ride') pause(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && mode === 'ride') pause(); });
+  for (const name of ['pedal', 'brake']) {
+    const el = $(name);
+    el.addEventListener('pointerdown', e => { e.preventDefault(); if (mode !== 'ride') return; el.setPointerCapture(e.pointerId); held[name] = true; el.classList.add('held'); });
+    for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) el.addEventListener(event, () => { held[name] = false; el.classList.remove('held'); });
+  }
+  let touchStart = null;
+  canvas.addEventListener('pointerdown', e => { if (mode !== 'ride' || motion.enabled && motion.ready) return; touchStart = { x: e.clientX, y: e.clientY, hopped: false }; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener('pointermove', e => {
+    if (!touchStart || mode !== 'ride') return;
+    touch.steer = S.clamp((e.clientX - touchStart.x) / 65, -1, 1); touch.fore = S.clamp((e.clientY - touchStart.y) / 80, -1, 1);
+    if (touchStart.y - e.clientY > 60 && !touchStart.hopped) { bike.hop(); touchStart.hopped = true; }
+  });
+  for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) canvas.addEventListener(event, () => { touchStart = null; touch.steer = touch.fore = 0; });
+  $('sound').onclick = () => {
+    try {
+      if (!audio) {
+        audio = new (window.AudioContext || window.webkitAudioContext)(); oscillator = audio.createOscillator(); gain = audio.createGain();
+        oscillator.type = 'triangle'; gain.gain.value = 0; oscillator.connect(gain); gain.connect(audio.destination); oscillator.start();
+      }
+      sound = !sound; audio.resume(); $('sound').textContent = sound ? 'SOUND ON' : 'SOUND OFF';
+    } catch (_) { notify('SOUND UNAVAILABLE'); }
+  };
+  function polygon(points, hex) {
+    ctx.fillStyle = hex; ctx.beginPath(); for (let i = 0; i < points.length; i++) { const p = points[i]; if (i) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); } ctx.closePath(); ctx.fill();
+  }
+  function drawCockpit(input) {
+    ctx.clearRect(0, 0, width, height);
+    const scale = Math.min(width / 1050, 1.05), bar = width * 0.235;
+    const manual = Math.max(0, bike.pitch - Math.atan(bike.grade));
+    const bob = mode === 'ride' && input.pedal ? Math.sin(bike.time * 13) * 1.4 : 0;
+    const cy = height * 0.85 - manual * height * 0.22 + bob + bike.frontCompression * 18;
+    ctx.save(); ctx.translate(width * 0.5, cy); ctx.rotate(bike.whip * 0.56 + bike.roll * 0.13);
+    const wheel = 10 + scale * 14, top = 35 - manual * height * 0.08;
+    polygon([[-wheel, height * 0.24], [wheel, height * 0.24], [wheel * 0.72, top], [0, top - 15], [-wheel * 0.72, top]], '#202b27');
+    polygon([[-wheel * 0.30, height * 0.24], [wheel * 0.14, height * 0.24], [wheel * 0.1, top - 4], [-wheel * 0.18, top - 7]], '#46534a');
+    for (let y = top + 10; y < height * 0.24; y += 17) polygon([[-wheel * 0.7, y], [wheel * 0.7, y + 4], [wheel * 0.7, y + 8], [-wheel * 0.7, y + 4]], '#15211e');
+    polygon([[-20 * scale, 90], [-6 * scale, 90], [-12 * scale, 5], [-24 * scale, 5]], '#7b8981');
+    polygon([[20 * scale, 90], [6 * scale, 90], [12 * scale, 5], [24 * scale, 5]], '#4d6659');
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#233630'; ctx.lineWidth = Math.max(7, 14 * scale);
+    ctx.beginPath(); ctx.moveTo(-bar, -26); ctx.lineTo(-bar * 0.40, -12); ctx.lineTo(-35 * scale, 6); ctx.lineTo(35 * scale, 6); ctx.lineTo(bar * 0.40, -12); ctx.lineTo(bar, -26); ctx.stroke();
+    ctx.strokeStyle = '#84978a'; ctx.lineWidth = 2; ctx.stroke();
+    for (const side of [-1, 1]) {
+      ctx.strokeStyle = '#162c22'; ctx.lineWidth = Math.max(11, 19 * scale); ctx.beginPath(); ctx.moveTo(side * bar * 0.76, -22); ctx.lineTo(side * bar, -26); ctx.stroke();
+      polygon([[side * bar * 0.74, -14], [side * bar * 0.87, 1], [side * bar * 0.78, 8], [side * bar * 0.61, -4]], input.brake ? '#d9ee87' : '#b9c0a7');
+      polygon([[side * bar * 0.83, -37], [side * (bar + 22), -31], [side * (bar + 36), -5], [side * bar * 0.98, 8], [side * bar * 0.78, -8]], '#29473a');
+      polygon([[side * (bar + 22), -5], [side * (bar + 36), -5], [side * (bar + 84), height * 0.20], [side * (bar + 32), height * 0.20]], '#bba582');
+    }
+    polygon([[-18, 0], [18, 0], [12, 33], [-12, 33]], '#c8da7b'); ctx.restore();
+  }
+  function updateHud(input, sensor) {
+    $('speed').innerHTML = `${Math.round(bike.speed * 3.6)}<span> KM/H</span>`;
+    $('distance').innerHTML = `${Math.floor(bike.distance)}<span> M</span>`;
+    const section = trail.at(bike.s), pal = S.palettes[section.biome];
+    $('biome').textContent = `0${section.biome + 1} / ${pal.name}`;
+    $('sectionname').textContent = `${practice ? 'PRACTICE / ' : ''}${section.name}`;
+    $('grade').textContent = `${Math.round(-bike.grade * 100)}% DESCENT`;
+    $('riderstate').textContent = mode === 'intro' ? 'READY TO RIDE' : mode === 'paused' ? 'PAUSED' : bike.air ? 'AIR / CENTER FOR LANDING' : bike.manual ? 'MANUAL / REAR CONTACT' : bike.slide > 0.20 ? 'SLIDING / EASE OFF' : input.brake ? 'BRAKING' : input.pedal ? 'PEDALING' : 'COAST / FIND THE FLOW';
+    $('axes').textContent = `STEER ${input.steer.toFixed(2)} · LIFT ${input.fore.toFixed(2)} · DOWN ${motion.down.toFixed(1)} m/s²`;
+    $('sensorstatus').textContent = `${motion.enabled ? sensor.ready ? 'TILT LIVE' : 'TILT WAITING' : 'TOUCH / KEYS'} · ${sensor.pumpAvailable ? `PUMP ${motion.pumpStage.toUpperCase()}` : 'PUMP SENSOR UNAVAILABLE'} · ${Math.round(fps)} FPS`;
+    $('contactstatus').textContent = `FRONT ${bike.frontContact ? 'ON' : 'UP'} / REAR ${bike.rearContact ? 'ON' : 'UP'} · GRIP ${Math.round((1 - bike.slide) * 100)}% · BUILD 0.2.0`;
+  }
+  function frame() {
+    const time = now(), elapsed = Math.min(time - lastFrame, 0.1); lastFrame = time;
+    fps += ((elapsed > 0 ? 1 / elapsed : 60) - fps) * 0.025;
+    const sensor = motion.read(time);
+    if (sensor.ready && !firstDataAnnounced) { firstDataAnnounced = true; notify('TILT CALIBRATED'); }
+    const useMotion = motion.enabled && sensor.ready;
+    const input = { steer: useMotion ? sensor.steer : (keys.a || keys.arrowleft ? -1 : 0) + (keys.d || keys.arrowright ? 1 : 0) || touch.steer,
+      fore: useMotion ? sensor.fore : keys.arrowup ? 0.80 : keys.arrowdown ? -0.65 : touch.fore,
+      pedal: held.pedal || keys.w, brake: held.brake || keys.s,
+      whip: (keys.q ? -1 : 0) + (keys.e ? 1 : 0) };
+    if (mode === 'ride') {
+      if (sensor.hop) bike.hop(); if (sensor.pump) { bike.pump(sensor.pump); notify('DOWNWARD PRESS / PUMP'); }
+      accumulator += elapsed;
+      while (accumulator >= S.STEP && mode === 'ride') {
+        bike.step(input, S.STEP); accumulator -= S.STEP;
+        if (bike.mode === 'crash') { finish(); break; }
+        if (bike.event && time - lastEventAt > 0.45) { notify(bike.event); lastEventAt = time; }
+      }
+      if (bike.level > level) { level = bike.level; notify(['', 'TRAIL FORK UNLOCKED', 'GRIPPY TIRES UNLOCKED', 'PRO FRAME UNLOCKED'][level]); }
+      if (bike.manual && !wasManual) notify('MANUAL / HOLD THE BALANCE'); wasManual = bike.manual;
+    } else { accumulator = 0; }
+    renderer.draw(trail, bike, elapsed || 1 / 60); drawCockpit(input);
+    if (time - shownAt > 0.1) { updateHud(input, sensor); shownAt = time; }
+    if (time > noticesUntil && $('message').textContent) $('message').textContent = '';
+    if (gain) {
+      gain.gain.setTargetAtTime(sound && mode === 'ride' ? 0.012 + bike.speed * 0.001 : 0, audio.currentTime, 0.1);
+      oscillator.frequency.setTargetAtTime(45 + bike.speed * 5 + bike.slide * 25, audio.currentTime, 0.1);
+    }
+    requestAnimationFrame(frame);
+  }
+  canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); if (mode === 'ride') pause(); notify('GRAPHICS PAUSED / RESTORING', 10); });
+  canvas.addEventListener('webglcontextrestored', () => { renderer.init(); renderer.reset(); resize(); notify('GRAPHICS RESTORED / TAP RESUME'); });
+  window.singletrackDebug = { get bike() { return bike; }, get trail() { return trail; }, motion, get mode() { return mode; }, start, version: '0.2.0' };
+  requestAnimationFrame(frame);
+})();
+</script></body></html>
