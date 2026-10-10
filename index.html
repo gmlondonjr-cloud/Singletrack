@@ -4,16 +4,31 @@
 #cockpit{pointer-events:none}.hud small{display:block;font-size:9px;letter-spacing:1.4px;margin-top:7px;color:var(--lime)}#sectionhud{position:fixed;top:122px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:2px;text-align:center;opacity:.8}#sectionhud small{display:block;margin-top:9px;font-size:8px;opacity:.65}.textbutton{background:none;border:0;padding:15px 0 0;font-size:9px;color:var(--lime)}.buildstamp{font-size:7px!important;opacity:.45;margin-top:5px!important}.settings{display:grid;gap:13px;margin-top:22px;border-top:1px solid #ffffff25;padding-top:20px}.settings label{display:flex;align-items:center;justify-content:space-between;gap:15px;font-size:11px}.settings select{background:#24483d;border:1px solid #b5c88766;color:var(--cream);font:11px 'DM Sans',sans-serif;padding:9px;border-radius:3px;max-width:210px}.checklabel{justify-content:start!important}.checklabel input{accent-color:var(--lime)}#permissionstatus{display:block;font-size:10px;line-height:1.5;opacity:.7;margin-top:13px}#diagnostics{position:fixed;left:50%;transform:translateX(-50%);bottom:168px;padding:10px 14px;background:#0a211ccc;border:1px solid #d9ee8740;max-width:95vw;text-align:center;font:9px/1.8 monospace;color:var(--lime);pointer-events:none;white-space:nowrap}#diagnostics span{display:block}#fatal{position:fixed;inset:20%;padding:28px;background:#17382f;z-index:20}#fatal h2{font-size:25px}.hud strong{font-family:'Arial Narrow',Impact,sans-serif;font-weight:500}h1,dialog h2,#results h2,#message{font-family:'Arial Narrow',Impact,sans-serif}#message{font-size:26px;top:25%}.panel{top:29%}.panel h1{font-size:clamp(75px,8vw,116px)}.introfoot{margin-top:26px}#results h1{font-size:90px}button{min-height:32px}#sectionhud:not(.riding){opacity:.5}@media(max-width:650px){#sectionhud{top:172px;left:20px;transform:none;text-align:left}.panel{top:30%}.panel h1{font-size:83px}#diagnostics{bottom:160px;font-size:7px}.settings select{max-width:185px}.topright button{min-width:34px}}@media(orientation:landscape) and (max-height:550px){header{padding:12px 20px}.brand{font-size:17px}.brand span{font-size:7px}.hud{top:81px;left:20px;right:20px}.hud strong{font-size:35px}.hud .eyebrow{font-size:8px}.hud small{font-size:7px}.panel{left:8%;top:30%;width:330px}.panel h1{font-size:65px;margin:15px 0}.panel p{font-size:11px;max-width:265px;margin:7px 0}.primary{padding:12px 18px;margin-top:13px;width:220px}.introfoot{display:none}.textbutton{padding-top:10px;font-size:8px}#controls{bottom:15px;left:20px;right:20px}.ridebutton{height:81px;width:99px}.ridebutton span{font-size:24px}#sectionhud{top:84px;left:50%;transform:translateX(-50%);font-size:8px;text-align:center}#message{top:24%;font-size:23px}#trailinfo{bottom:20px;left:20px}#diagnostics{bottom:130px;font-size:8px;padding:5px 10px}.controlcenter small{font-size:7px}.controlcenter button{padding:7px 10px;font-size:8px}#results h1{font-size:72px;margin:12px 0}#results h2{font-size:24px;margin:12px 0}.buildstamp{margin-top:2px!important}}
 @media(orientation:landscape) and (max-height:550px){#intro{top:28%;max-height:70vh;overflow:auto}#intro h1{font-size:52px;margin:10px 0}#intro .primary{margin-top:8px;padding:8px 15px}#intro .textbutton{padding-top:8px}#trailinfo{display:none}}
 @media(orientation:landscape) and (max-height:340px){#intro h1{font-size:38px}#intro p{display:none}}
+
+/* Prevent Safari selection and long-press menus during held riding controls. */
+#controls,#controls *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
+.ridebutton{justify-content:center;-webkit-tap-highlight-color:transparent}
+.ridebutton svg{width:54px;height:54px;fill:none;stroke:currentColor;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.ridebutton .caliper{fill:currentColor;stroke-width:2}
+@media(orientation:landscape) and (max-height:550px){.ridebutton svg{width:46px;height:46px}}
+
+#manualmeter{position:fixed;right:max(22px,env(safe-area-inset-right));top:34%;width:92px;text-align:center;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;color:var(--lime);padding:10px 5px;background:#102820c9;border:1px solid #ffffff35;border-radius:4px}
+#manualmeter strong{font-size:10px;letter-spacing:1.5px}#manualmeter small{display:block;font-size:8px;letter-spacing:.5px;margin-top:10px}
+.balancebar{position:relative;margin:14px auto 0;width:18px;height:130px;border:1px solid #ffffff55;border-radius:3px;background:linear-gradient(to top,#839165 0%,#d9ee87 28%,#d9ee87 55%,#e7bf70 72%,#ed795f 100%)}
+.balancezone{position:absolute;bottom:28%;height:27%;left:-6px;right:-6px;border-top:1px solid #f3f0db;border-bottom:1px solid #f3f0db}
+#balancepointer{position:absolute;left:-10px;right:-10px;height:4px;background:#fff;box-shadow:0 0 0 2px #17382f;transform:translateY(50%)}
+#manualmeter.danger{color:#ff987e;border-color:#ed795f}#manualmeter.danger #balancepointer{background:#ff987e}
+@media(orientation:landscape) and (max-height:550px){#manualmeter{right:max(24px,env(safe-area-inset-right));top:36%;width:88px;padding:6px 3px}.balancebar{height:80px;margin-top:9px}#manualmeter small{margin-top:8px;font-size:7px}}
 </style></head>
 <body><canvas id="world" aria-label="First-person mountain biking trail"></canvas><canvas id="cockpit" aria-hidden="true"></canvas><div class="grain"></div>
-<header><a class="brand" href="#" aria-label="Singletrack">↟ SINGLETRACK<span>ENDLESS DESCENT</span></a><div class="topright"><span class="tag">PLAYTEST / 0.2.0</span><button id="sound" aria-label="Toggle sound">SOUND OFF</button><button id="guide" aria-label="Controls and playtest settings">?</button><button id="pause" aria-label="Pause or resume">Ⅱ</button></div></header>
+<header><a class="brand" href="#" aria-label="Singletrack">↟ SINGLETRACK<span>ENDLESS DESCENT</span></a><div class="topright"><span class="tag">PLAYTEST / 0.2.2</span><button id="sound" aria-label="Toggle sound">SOUND OFF</button><button id="guide" aria-label="Controls and playtest settings">?</button><button id="pause" aria-label="Pause or resume">Ⅱ</button></div></header>
 <div class="hud"><div><span class="eyebrow">GROUND SPEED</span><strong id="speed">0<span> KM/H</span></strong><small id="riderstate">READY TO RIDE</small></div><div class="hudright"><span class="eyebrow" id="biome">01 / REDWOOD FOREST</span><strong id="distance">0<span> M</span></strong><small id="best">BEST 0 M</small></div></div>
-<div id="sectionhud"><span id="sectionname">WARM-UP</span><small id="grade">5% DESCENT</small></div>
-<main id="intro" class="panel"><div class="edition">↓ &nbsp; EARN THE TURN / BUILD 0.2.0</div><h1>Find your<br><em>flow.</em></h1><p>Your line. Your momentum. A mountain that never ends.</p><button class="primary" id="ride">DROP IN <span>↗</span></button><button id="enableintro" class="textbutton">ENABLE MOTION CONTROLS ↗</button><div class="introfoot"><span>POLYGONAL WORLD. REAL MOMENTUM.</span><span>CONTROLS & PRACTICE SECTIONS: TAP ?</span></div></main>
-<div id="message" role="status"></div><div id="trailinfo"><span class="green">●</span> REDWOOD FOREST <span> / </span> FLOW TRAIL <small>BUILD 0.2.0 · BRAKE BEFORE THE BERM.</small></div>
-<div id="controls"><button id="brake" class="ridebutton"><span>↓</span>BRAKE<small>HOLD</small></button><div class="controlcenter"><span id="inputmode">← A / D → STEER</span><small id="controlhint">↑ MANUAL · SPACE HOP · SHIFT PUMP</small><button id="motion">ENABLE TILT ↗</button><small class="buildstamp">0.2.0</small></div><button id="pedal" class="ridebutton pedal"><span>↑</span>PEDAL<small>HOLD</small></button></div>
+<aside id="manualmeter" class="hidden" aria-label="Manual balance"><strong id="manualstate">MANUAL</strong><div class="balancebar" role="meter" aria-label="Rearward balance" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="balancezone"></span><span id="balancepointer"></span></div><small id="balancehint">BALANCE</small></aside><div id="sectionhud"><span id="sectionname">WARM-UP</span><small id="grade">5% DESCENT</small></div>
+<main id="intro" class="panel"><div class="edition">↓ &nbsp; EARN THE TURN / BUILD 0.2.2</div><h1>Find your<br><em>flow.</em></h1><p>Your line. Your momentum. A mountain that never ends.</p><button class="primary" id="ride">DROP IN <span>↗</span></button><button id="enableintro" class="textbutton">ENABLE MOTION CONTROLS ↗</button><div class="introfoot"><span>POLYGONAL WORLD. REAL MOMENTUM.</span><span>CONTROLS & PRACTICE SECTIONS: TAP ?</span></div></main>
+<div id="message" role="status"></div><div id="trailinfo"><span class="green">●</span> REDWOOD FOREST <span> / </span> FLOW TRAIL <small>BUILD 0.2.2 · BRAKE BEFORE THE BERM.</small></div>
+<div id="controls"><button id="brake" class="ridebutton" aria-label="Brake (hold)"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="7"/><path d="M32 10v8m22 14h-8M32 54v-8M10 32h8M17 17l6 6m24 24-6-6M17 47l6-6"/><path class="caliper" d="M43 12h12v24H43z"/></svg></button><div class="controlcenter"><span id="inputmode">← A / D → STEER</span><small id="controlhint">↑ MANUAL · SPACE HOP · SHIFT PUMP</small><button id="motion">ENABLE TILT ↗</button><small class="buildstamp">0.2.2</small></div><button id="pedal" class="ridebutton pedal" aria-label="Pedal / accelerate (hold)"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle cx="32" cy="32" r="12"/><circle cx="32" cy="32" r="3"/><path d="M32 32l15-15M32 32 17 47"/><rect x="43" y="10" width="16" height="8" rx="2"/><rect x="5" y="46" width="16" height="8" rx="2"/></svg></button></div>
 <div id="diagnostics" class="hidden"><span id="axes"></span><span id="sensorstatus"></span><span id="contactstatus"></span></div>
-<dialog id="help"><button class="close" id="closehelp" aria-label="Close controls">×</button><span class="eyebrow">RIDER'S FIELD GUIDE / 0.2.0</span><h2>Ride with the trail.</h2><p>Brake before the bend, choose your line, then lean into it. The bike now turns independently: leave a turn too late and you can run off the trail.</p><dl><dt>Tilt left / right</dt><dd>Steer. A smaller lean now produces a stronger turn.</dd><dt>Pull the phone toward yourself and hold</dt><dd>Lift and balance the front wheel. Brake or release to bring it down. If it lowers instead, reverse the lift direction below.</dd><dt>Lift deliberately, then tip forward quickly</dt><dd>Bunny hop. A sustained manual hold or a simple release does not trigger a hop.</dd><dt>Press the whole phone downward</dt><dd>Keep its angle steady. Work the back of a roller; return to your holding position to reset. Experimental: requires acceleration access.</dd><dt>Lean in the air, then center</dt><dd>Whip the bike and recover before landing.</dd></dl>
+<dialog id="help"><button class="close" id="closehelp" aria-label="Close controls">×</button><span class="eyebrow">RIDER'S FIELD GUIDE / 0.2.2</span><h2>Ride with the trail.</h2><p>Brake before the bend, choose your line, then lean into it. The bike now turns independently: leave a turn too late and you can run onto loose ground. Minor excursions scrub speed and unsettle the bike; ease off, brake, and steer back.</p><dl><dt>Crank icon / brake-disc icon</dt><dd>Hold the crank to pedal. Hold the brake disc to slow down.</dd><dt>Tilt left / right</dt><dd>Steer. A smaller lean now produces a stronger turn.</dd><dt>Pull the phone toward yourself and hold</dt><dd>Lift and balance the front wheel. Watch the side meter: lower is front-down, the middle band is balance, and the red top means a backward fall. Holding rearward input too long builds instability. Ease forward or tap the brake to recover. If it lowers instead, reverse the lift direction below.</dd><dt>Lift deliberately, then tip forward quickly</dt><dd>Bunny hop. A sustained manual hold or a simple release does not trigger a hop.</dd><dt>Press the whole phone downward</dt><dd>Keep its angle steady. Work the back of a roller; return to your holding position to reset. Experimental: requires acceleration access.</dd><dt>Lean in the air, then center</dt><dd>Whip the bike and recover before landing.</dd></dl>
 <div class="settings"><label>Steering response<select id="sensitivity"><option value="19">Gentle</option><option value="15" selected>Responsive</option><option value="11">Sharp</option></select></label><label>Lift direction<select id="liftdirection"><option value="1">Normal</option><option value="-1">Reverse</option></select></label><label>Next run starts at<select id="startsection"><option value="3">Warm-up / full descent</option><option value="103">Berms / practice</option><option value="215">Rollers / practice</option><option value="320">Steep chute / practice</option><option value="415">Roots & rocks / practice</option><option value="615">Jump line / practice</option></select></label><label class="checklabel"><input type="checkbox" id="showdiagnostics"> Show sensor & tire readout</label></div>
 <p class="muted">Desktop: A/D or ←/→ steer · W pedal · S brake · ↑ manual · Space hop · Shift pump · Q/E whip · P pause. Touch fallback: drag left/right to steer, drag down to manual, swipe up to hop. Tilt and downward-motion pumping need Safari over HTTPS.</p><button class="primary" id="calibrate">ENABLE / CALIBRATE ↗</button><small id="permissionstatus">Hold the phone comfortably and still while calibrating.</small></dialog>
 <div id="results" class="panel hidden"><div class="edition">THE TRAIL WINS THIS ONE</div><h2 id="crashreason">You left the trail.</h2><h1 id="finaldistance">0 <em>m</em></h1><p id="runsummary"></p><button class="primary" id="retry">RIDE AGAIN <span>↗</span></button></div>
@@ -149,8 +164,8 @@
         vx: p.tx * speed, vz: p.tz * speed, vy: -speed * 0.048, yaw: p.yaw, yawRate: 0, pitch: Math.atan(slope / WB), pitchRate: 0,
         roll: 0, speed, s, distance: 0, startS: s, n: 0, mode: 'ride', time: 0, frontLoad: G / 2, rearLoad: G / 2,
         frontContact: true, rearContact: true, frontCompression: G / 110, rearCompression: G / 110,
-        air: false, manual: false, offTime: 0, slide: 0, whip: 0, whipRate: 0, didWhip: false,
-        tricks: 0, landings: 0, pumps: 0, manualTime: 0, pumpAge: 10, pumpPower: 0, hopTime: -10,
+        air: false, manual: false, offTime: 0, offTrail: 0, balanceRisk: 0, slide: 0, whip: 0, whipRate: 0, didWhip: false,
+        tricks: 0, landings: 0, pumps: 0, manualTime: 0, manualHold: 0, manualDrift: 0, manualBalance: 0, pumpAge: 10, pumpPower: 0, hopTime: -10,
         hopQueued: 0, pumpQueued: 0, airTime: 0, level: 0, event: '', crashReason: '', bank: p.bank, grade: p.grade });
     }
     hop(power = 1) { if (this.mode === 'ride' && !this.air && this.time - this.hopTime > 0.65) this.hopQueued = clamp(power, 0.4, 1); }
@@ -162,14 +177,27 @@
       const steer = clamp(input.steer || 0, -1, 1), fore = clamp(input.fore || 0, -1, 1);
       const pedal = input.pedal ? 1 : 0, brake = input.brake ? 1 : 0;
       let road = this.trail.nearest(this.x, this.z, this.s, 12);
-      const on = Math.abs(road.n) <= road.width / 2 + 0.12;
+      // Ease into loose shoulder resistance rather than an invisible fatal boundary.
+      const shoulder = Math.max(0, Math.abs(road.n) - road.width / 2);
+      const roughness = smooth(shoulder / 1.5);
+      this.offTrail = roughness;
       this.speed = Math.hypot(this.vx, this.vz);
       const sx = Math.sin(this.yaw), cz = Math.cos(this.yaw), rx = cz, rz = -sx;
       const f = this.trail.contact(this.x + sx * WB / 2, this.z + cz * WB / 2, road.s + WB / 2);
       const r = this.trail.contact(this.x - sx * WB / 2, this.z - cz * WB / 2, road.s - WB / 2);
       const slopePitch = Math.atan2(f.height - r.height, WB);
       const targetLift = Math.max(0, fore - 0.12) * 0.78 * (1 - brake * 0.90);
-      const targetPitch = slopePitch + targetLift;
+      // Holding rearward input builds a rearward weight shift; correcting or braking
+      // unwinds it. Duration increases the need to correct, rather than a death timer.
+      if (this.manual && !this.air) {
+        this.manualHold += dt;
+        const fatigue = Math.min(0.08, this.manualHold * 0.008);
+        this.manualDrift = clamp(this.manualDrift + ((fore - 0.42) * 0.65 + fatigue - brake * 2.4) * dt, 0, 1.1);
+      } else {
+        this.manualHold = 0;
+        this.manualDrift = Math.max(0, this.manualDrift - dt * (brake ? 3 : 1.4));
+      }
+      const targetPitch = slopePitch + targetLift + this.manualDrift * (1 - brake * 0.95);
       if (!this.air || this.airTime < 0.06) {
         this.pitchRate += ((targetPitch - this.pitch) * 38 - this.pitchRate * 10) * dt;
       } else this.pitchRate += (fore * 2.0 - this.pitchRate * 1.7) * dt;
@@ -209,7 +237,11 @@
       const lowerBound = Math.min(f.height, r.height) + RADIUS - 0.20;
       if (this.y < lowerBound) { this.y = lowerBound; this.vy = Math.max(0, this.vy); }
       this.manual = !this.air && !this.frontContact && this.rearContact && this.pitch - slopePitch > 0.15;
+      this.manualBalance = clamp((this.pitch - slopePitch - 0.15) / 0.97, 0, 1);
       if (this.manual) this.manualTime += dt;
+      if (!this.air && this.rearContact && this.pitch - slopePitch > 1.12) {
+        this.manualBalance = 1; this.crash('You looped out. Ease forward or tap the brake.'); return;
+      }
       if (this.air) {
         this.whipRate += (steer * 7.0 + (input.whip || 0) * 7.0 - this.whip * 5.0 - this.whipRate * 3.2) * dt;
         this.whip += this.whipRate * dt;
@@ -223,7 +255,7 @@
       const latV = this.vx * rx + this.vz * rz;
       const alongV = this.vx * sx + this.vz * cz;
       let mu = palettes[road.biome].grip + (this.level >= 2 ? 0.10 : 0);
-      if (!on) mu *= 0.56;
+      mu *= mix(1, 0.62, roughness);
       const load = clamp(frontForce + rearForce, 0, 20);
       const support = Math.min(1, load / G);
       const traction = mu * load;
@@ -235,7 +267,7 @@
       const need = -latV * 6.0 + this.yawRate * this.speed * 0.50 - bankBike;
       const tireForce = this.air ? 0 : clamp(need, -lateralCapacity, lateralCapacity);
       this.slide = damp(this.slide, !this.air ? clamp((Math.abs(need) - lateralCapacity) / 10, 0, 1) : 0, 5, dt);
-      const drag = 0.014 * this.speed * this.speed + (!this.air ? 0.26 + (on ? 0 : 1.6) : 0.06);
+      const drag = 0.014 * this.speed * this.speed + (!this.air ? 0.26 + roughness * (1.6 + this.speed * 0.12) : 0.06);
       const drive = (pedal * (3.0 + this.level * 0.10) - braking) * support;
       const gradeAccel = -G * forwardGrade / Math.sqrt(1 + forwardGrade * forwardGrade) * support;
       const pumpAlong = -pump * 7.0 * forwardGrade / Math.sqrt(1 + forwardGrade * forwardGrade);
@@ -254,12 +286,18 @@
       this.s = road.s; this.n = road.n; this.bank = road.bank; this.grade = road.grade;
       this.distance = Math.max(this.distance, this.s - this.startS);
       this.level = Math.min(3, Math.floor(this.distance / 500));
-      const targetRoll = Math.atan(this.yawRate * this.speed / G);
-      this.roll = damp(this.roll, clamp(targetRoll, -0.8, 0.8), 6, dt);
-      const outside = Math.abs(this.n) > road.width / 2 + 0.22;
-      this.offTime = outside ? this.offTime + dt : Math.max(0, this.offTime - dt * 2);
-      if (this.offTime > (this.speed > 1.3 ? 0.40 : 1.1)) this.crash(this.slide > 0.2 ? 'Too much speed. The tires washed out.' : 'You missed the trail.');
-      if (Math.abs(this.n) > road.width / 2 + 3) this.crash('You rode off the trail.');
+      // Loose ground unsettles balance without steering the rider back onto rails.
+      const chatter = this.air ? 0 : roughness * clamp(this.speed / 9, 0, 1) *
+        (Math.sin(this.s * 2.3) * 0.09 + Math.sin(this.s * 4.7) * 0.045);
+      const targetRoll = Math.atan(this.yawRate * this.speed / G) + chatter;
+      this.roll = damp(this.roll, clamp(targetRoll, -1.05, 1.05), 6, dt);
+      // A crash requires sustained sideways loss of control, never time outside the trail.
+      // Slowing or braking settles the bike and allows a shoulder excursion to recover.
+      const sidewaysSlip = Math.abs(this.vx * Math.cos(this.yaw) - this.vz * Math.sin(this.yaw));
+      const falling = !this.air && this.speed > 6 && sidewaysSlip > 3.5 &&
+        this.slide > 0.65 && Math.abs(this.roll) > 0.70;
+      this.balanceRisk = falling ? this.balanceRisk + dt : Math.max(0, this.balanceRisk - dt * 2);
+      if (this.balanceRisk > 0.8) this.crash('You lost balance in the slide.');
       if (this.pitch > 1.40 && !this.air) this.crash('Too far back. Cover the brake.');
       if (this.event === '' && pump > 0.7 && forwardGrade < -0.06) this.event = 'PUMP / DRIVE THE TRANSITION';
       this.trail.ensure(this.s + 245); this.trail.prune(this.s);
@@ -681,6 +719,8 @@
   document.addEventListener('visibilitychange', () => { if (document.hidden && mode === 'ride') pause(); });
   for (const name of ['pedal', 'brake']) {
     const el = $(name);
+    el.addEventListener('contextmenu', e => e.preventDefault());
+    el.addEventListener('dragstart', e => e.preventDefault());
     el.addEventListener('pointerdown', e => { e.preventDefault(); if (mode !== 'ride') return; el.setPointerCapture(e.pointerId); held[name] = true; el.classList.add('held'); });
     for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) el.addEventListener(event, () => { held[name] = false; el.classList.remove('held'); });
   }
@@ -735,10 +775,18 @@
     $('biome').textContent = `0${section.biome + 1} / ${pal.name}`;
     $('sectionname').textContent = `${practice ? 'PRACTICE / ' : ''}${section.name}`;
     $('grade').textContent = `${Math.round(-bike.grade * 100)}% DESCENT`;
-    $('riderstate').textContent = mode === 'intro' ? 'READY TO RIDE' : mode === 'paused' ? 'PAUSED' : bike.air ? 'AIR / CENTER FOR LANDING' : bike.manual ? 'MANUAL / REAR CONTACT' : bike.slide > 0.20 ? 'SLIDING / EASE OFF' : input.brake ? 'BRAKING' : input.pedal ? 'PEDALING' : 'COAST / FIND THE FLOW';
+    const meterVisible = (mode === 'ride' || mode === 'paused' || mode === 'crash') &&
+      !bike.air && (bike.manual || bike.manualBalance > 0.08);
+    $('manualmeter').classList.toggle('hidden', !meterVisible);
+    $('manualmeter').classList.toggle('danger', bike.manualBalance > 0.72);
+    $('manualstate').textContent = bike.manual ? 'MANUAL' : bike.manualBalance >= 1 ? 'LOOP OUT' : 'FRONT LIFT';
+    $('balancepointer').style.bottom = `${bike.manualBalance * 100}%`;
+    $('manualmeter').querySelector('[role="meter"]').setAttribute('aria-valuenow', String(Math.round(bike.manualBalance * 100)));
+    $('balancehint').textContent = bike.manualBalance > 0.72 ? 'BRAKE / FORWARD' : bike.manualBalance < 0.22 ? 'LIFT' : 'BALANCE';
+    $('riderstate').textContent = mode === 'intro' ? 'READY TO RIDE' : mode === 'paused' ? 'PAUSED' : bike.air ? 'AIR / CENTER FOR LANDING' : bike.manual ? 'MANUAL / REAR CONTACT' : bike.offTrail > 0.10 ? 'LOOSE GROUND / SLOW & RECOVER' : bike.slide > 0.20 ? 'SLIDING / EASE OFF' : input.brake ? 'BRAKING' : input.pedal ? 'PEDALING' : 'COAST / FIND THE FLOW';
     $('axes').textContent = `STEER ${input.steer.toFixed(2)} · LIFT ${input.fore.toFixed(2)} · DOWN ${motion.down.toFixed(1)} m/s²`;
     $('sensorstatus').textContent = `${motion.enabled ? sensor.ready ? 'TILT LIVE' : 'TILT WAITING' : 'TOUCH / KEYS'} · ${sensor.pumpAvailable ? `PUMP ${motion.pumpStage.toUpperCase()}` : 'PUMP SENSOR UNAVAILABLE'} · ${Math.round(fps)} FPS`;
-    $('contactstatus').textContent = `FRONT ${bike.frontContact ? 'ON' : 'UP'} / REAR ${bike.rearContact ? 'ON' : 'UP'} · GRIP ${Math.round((1 - bike.slide) * 100)}% · BUILD 0.2.0`;
+    $('contactstatus').textContent = `FRONT ${bike.frontContact ? 'ON' : 'UP'} / REAR ${bike.rearContact ? 'ON' : 'UP'} · GRIP ${Math.round((1 - bike.slide) * 100)}% · BUILD 0.2.2`;
   }
   function frame() {
     const time = now(), elapsed = Math.min(time - lastFrame, 0.1); lastFrame = time;
@@ -772,7 +820,7 @@
   }
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); if (mode === 'ride') pause(); notify('GRAPHICS PAUSED / RESTORING', 10); });
   canvas.addEventListener('webglcontextrestored', () => { renderer.init(); renderer.reset(); resize(); notify('GRAPHICS RESTORED / TAP RESUME'); });
-  window.singletrackDebug = { get bike() { return bike; }, get trail() { return trail; }, motion, get mode() { return mode; }, start, version: '0.2.0' };
+  window.singletrackDebug = { get bike() { return bike; }, get trail() { return trail; }, motion, get mode() { return mode; }, start, version: '0.2.2' };
   requestAnimationFrame(frame);
 })();
 </script></body></html>
